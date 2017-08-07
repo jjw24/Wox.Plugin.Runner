@@ -86,6 +86,7 @@ namespace Wox.Plugin.Runner.Settings
             set
             {
                 Set( () => ArgumentsFormat, ref argumentsFormat, value );
+                CheckDirty();
             }
         }
 

@@ -34,12 +34,15 @@ namespace Wox.Plugin.Runner
             if (query.Terms.Length < 2 && !this.isGlobal) return results;
 
             var commandName = query.Terms[isGlobal ? 0 : 1];
+            var terms = query.Terms.ToList();
+            terms.RemoveAt(0); // remove command name
             var matches = RunnerConfiguration.Commands.Where( c => c.Shortcut.StartsWith( commandName ) )
                 .Select( c => new Result()
                 {
                     Score = int.MaxValue / 2,
-                    Title = c.Description,
-                    Action = e => RunCommand( e, query, c )
+                    Title = c.Description + " " + String.Join( " ", terms ),
+                    Action = e => RunCommand( e, terms, c ),
+                    IcoPath = c.Path
                 } );
             results.AddRange( matches );
             return results;
@@ -50,11 +53,11 @@ namespace Wox.Plugin.Runner
             return new RunnerSettings( new RunnerSettingsViewModel( initContext ) );
         }
 
-        private bool RunCommand( ActionContext e, Query query, Command command )
+        private bool RunCommand( ActionContext e, List<string> terms, Command command )
         {
             try
             {
-                var args = GetProcessArguments( command, query );
+                var args = GetProcessArguments( command, terms );
                 var startInfo = new ProcessStartInfo(args.FileName, args.Arguments);
                 if (args.WorkingDirectory != null) {
                     startInfo.WorkingDirectory = args.WorkingDirectory;
@@ -77,13 +80,13 @@ namespace Wox.Plugin.Runner
             return true;
         }
 
-        private ProcessArguments GetProcessArguments( Command c, Query q )
+        private ProcessArguments GetProcessArguments( Command c, List<string> terms )
         {
             var argString = String.Empty;
             if ( !String.IsNullOrEmpty( c.ArgumentsFormat ) )
             {
-                var arguments = q.Terms.ToList();
-                //arguments.RemoveAt( 0 );
+                var arguments = terms;
+
                 if ( !isGlobal )
                     arguments.RemoveAt( 0 );
                 if ( arguments.Count > 0 )
