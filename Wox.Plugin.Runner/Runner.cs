@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Windows;
@@ -54,7 +55,12 @@ namespace Wox.Plugin.Runner
             try
             {
                 var args = GetProcessArguments( command, query );
-                Process.Start( args.FileName, args.Arguments );
+                var startInfo = new ProcessStartInfo(args.FileName, args.Arguments);
+                if (args.WorkingDirectory != null) {
+                    startInfo.WorkingDirectory = args.WorkingDirectory;
+                }
+                Process.Start(startInfo);
+                // Process.Start( args.FileName, args.Arguments );
             }
             catch ( Win32Exception w32Ex )
             {
@@ -73,7 +79,7 @@ namespace Wox.Plugin.Runner
 
         private ProcessArguments GetProcessArguments( Command c, Query q )
         {
-            string argString = String.Empty;
+            var argString = String.Empty;
             if ( !String.IsNullOrEmpty( c.ArgumentsFormat ) )
             {
                 var arguments = q.Terms.ToList();
@@ -87,10 +93,16 @@ namespace Wox.Plugin.Runner
                 else
                     argString = String.Empty;
             }
+            var workingDir = c.WorkingDirectory;
+            if (string.IsNullOrEmpty(workingDir)) {
+                // Use directory where executable is based.
+                workingDir = Path.GetDirectoryName(c.Path);
+            }
             return new ProcessArguments
             {
                 FileName = c.Path,
-                Arguments = argString
+                Arguments = argString,
+                WorkingDirectory = workingDir
             };
         }
 
@@ -98,6 +110,7 @@ namespace Wox.Plugin.Runner
         {
             public string FileName { get; set; }
             public string Arguments { get; set; }
+            public string WorkingDirectory { get; set; }
         }
     }
 }
