@@ -1,11 +1,10 @@
-﻿using GalaSoft.MvvmLight;
+﻿using Flow.Launcher.Plugin;
+using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
 using GalaSoft.MvvmLight.Ioc;
 using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
-using System.Text;
 using Wox.Plugin.Runner.Services;
 
 namespace Wox.Plugin.Runner.Settings

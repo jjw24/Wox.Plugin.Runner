@@ -1,4 +1,5 @@
-﻿using GalaSoft.MvvmLight.Ioc;
+﻿using Flow.Launcher.Plugin;
+using GalaSoft.MvvmLight.Ioc;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -25,7 +26,7 @@ namespace Wox.Plugin.Runner
                 SimpleIoc.Default.Register<IMessageService>( () => new MessageService() );
             }
             initContext = context;
-            isGlobal = context.CurrentPluginMetadata.ActionKeywords.Contains(Plugin.Query.GlobalPluginWildcardSign);
+            isGlobal = context.CurrentPluginMetadata.ActionKeywords.Contains(Flow.Launcher.Plugin.Query.GlobalPluginWildcardSign);
         }
 
         public List<Result> Query( Query query )
