@@ -1,0 +1,14 @@
+{
+  "ID": "c0c4767a-b6f1-428b-b0a2-bbfae448409c",
+  "ActionKeywords": [
+    "r"
+  ],
+  "Name": "Runner",
+  "Description": "A plugin that allows you to create simple command shortcuts",
+  "Author": "Jesse Barocio",
+  "Version": "1.0.0",
+  "Language": "csharp",
+  "Website": "https://github.com/jessebarocio/Wox.Plugin.Runner",
+  "ExecuteFileName": "Wox.Plugin.Runner.dll",
+  "IcoPath": "Images\\gear.png"
+}
