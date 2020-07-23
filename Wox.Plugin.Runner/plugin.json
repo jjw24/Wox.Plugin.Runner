@@ -2,7 +2,7 @@
   "ID": "176690627AB54C8381A7FD99A3519F42",
   "ActionKeyword": "r",
   "Name": "Wox.Plugin.Runner",
-  "Description": "Create simple command shortcuts in Wox",
+  "Description": "Create simple command shortcuts",
   "Author": "Jesse Barocio (@jessebarocio)",
   "Version": "1.0.11",
   "Language": "csharp",
