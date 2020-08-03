@@ -15,9 +15,8 @@ namespace Wox.Plugin.Runner
 
     class ConfigurationLoader : IConfigurationLoader
     {
-        readonly static string configPath = Path.Combine(
-            Environment.GetFolderPath( Environment.SpecialFolder.LocalApplicationData ), "Wox.Plugin.Runner" );
-        readonly static string configFile = Path.Combine( configPath, "commands.json" );
+        readonly static string configPath = Path.Combine(Runner.Context.CurrentPluginMetadata.PluginDirectory, "Settings");
+        readonly static string configFile = Path.Combine(configPath, "commands.json");
 
         public ConfigurationLoader()
         {

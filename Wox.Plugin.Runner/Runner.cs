@@ -12,14 +12,14 @@ namespace Wox.Plugin.Runner
 {
     public class Runner : IPlugin, ISettingProvider
     {
-        PluginInitContext initContext;
+        internal static PluginInitContext Context;
         RunnerSettingsViewModel viewModel;
         bool isGlobal;
 
         public void Init( PluginInitContext context )
         {
-            initContext = context;
-            viewModel = new RunnerSettingsViewModel(initContext);
+            Context = context;
+            viewModel = new RunnerSettingsViewModel(Context);
             isGlobal = context.CurrentPluginMetadata.ActionKeywords.Contains(Flow.Launcher.Plugin.Query.GlobalPluginWildcardSign);
         }
 
@@ -69,7 +69,7 @@ namespace Wox.Plugin.Runner
             }
             catch ( FormatException )
             {
-                initContext.API.ShowMsg("There was a problem. Please check the arguments format for the command.");
+                Context.API.ShowMsg("There was a problem. Please check the arguments format for the command.");
             }
             return true;
         }
