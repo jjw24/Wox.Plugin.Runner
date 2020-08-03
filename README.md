@@ -1,5 +1,5 @@
 
-This is a port of the Wox plugin [Runner](https://github.com/jessebarocio/Wox.Plugin.Runner) created by Jesse Barocio @jessebarocio based on the [fork]((https://github.com/CrazyCoder/Wox.Plugin.Runner) from Serge Baranov @CrazyCoder.
+This is a port of the Wox plugin [Runner](https://github.com/jessebarocio/Wox.Plugin.Runner) created by Jesse Barocio @jessebarocio based on the [fork](https://github.com/CrazyCoder/Wox.Plugin.Runner) from Serge Baranov @CrazyCoder.
 
 This port is intended to be used for [Flow Launcher](https://github.com/Flow-Launcher/Flow.Launcher). It will not work for Wox.
 
