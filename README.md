@@ -1,3 +1,21 @@
+
+This is a port of the Wox plugin [Runner](https://github.com/jessebarocio/Wox.Plugin.Runner) created by Jesse Barocio @jessebarocio based on the [fork]((https://github.com/CrazyCoder/Wox.Plugin.Runner) from Serge Baranov @CrazyCoder.
+
+This port is intended to be used for [Flow Launcher](https://github.com/Flow-Launcher/Flow.Launcher). It will not work for Wox.
+
+To download this plugin, go to the latest [release](https://github.com/jjw24/Wox.Plugin.Runner/releases/latest) and extract the zip file to Flow's user data's plugin directory.
+
+Changes contained in this port:
+
+- Upgraded to .Net Core 3.1
+- Changed Wox's plugin library to Flow's plugin library
+- Removed MvvmLightLibs library
+- Changed the location of the setting file commands.json
+- Remove obsolete Runner.Configurator
+
+Below are the changes from @CrazyCoder.
+
+-------------------
 # Wox.Plugin.Runner
 
 A plugin that allows you to create simple command shortcuts in [Wox](http://getwox.com).
