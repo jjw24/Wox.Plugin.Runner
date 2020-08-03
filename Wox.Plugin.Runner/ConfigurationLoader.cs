@@ -38,34 +38,4 @@ namespace Wox.Plugin.Runner
             File.WriteAllText( configFile, JsonConvert.SerializeObject( commands ) );
         }
     }
-
-    class DesignTimeConfigurationLoader : IConfigurationLoader
-    {
-
-        public IEnumerable<Command> LoadCommands()
-        {
-            return new List<Command>()
-            {
-                new Command
-                {
-                    Description = "Sample Command 1",
-                    Shortcut = "shortcut1",
-                    Path = @"C:\mycommand1.exe",
-                    WorkingDirectory = @"C:\workpath1"
-                },
-                new Command
-                {
-                    Description = "Sample Command 2",
-                    Shortcut = "shortcut2",
-                    Path = @"C:\mycommand2.exe",
-                    WorkingDirectory = @"C:\workpath2"
-                }
-            };
-        }
-
-        public void SaveCommands( IEnumerable<Command> commands )
-        {
-            throw new NotImplementedException();
-        }
-    }
 }

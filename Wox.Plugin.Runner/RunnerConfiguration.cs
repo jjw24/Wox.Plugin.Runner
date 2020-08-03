@@ -36,10 +36,10 @@ namespace Wox.Plugin.Runner
             }
         }
 
-        public static IEnumerable<Command> GetCommands()
-        {
-            return Loader.LoadCommands();
-        }
+        //public static IEnumerable<Command> GetCommands()
+        //{
+        //    return Loader.LoadCommands();
+        //}
 
         public static void SaveCommands(IEnumerable<Command> commands)
         {
