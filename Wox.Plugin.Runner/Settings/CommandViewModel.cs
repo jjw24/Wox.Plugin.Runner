@@ -1,12 +1,7 @@
-﻿using GalaSoft.MvvmLight;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
+﻿
 namespace Wox.Plugin.Runner.Settings
 {
-    class CommandViewModel : ViewModelBase
+    public class CommandViewModel
     {
         public CommandViewModel( Command command )
         {
@@ -29,7 +24,7 @@ namespace Wox.Plugin.Runner.Settings
             }
             set
             {
-                Set( () => Description, ref description, value );
+                description = value;
                 CheckDirty();
             }
         }
@@ -43,7 +38,7 @@ namespace Wox.Plugin.Runner.Settings
             }
             set
             {
-                Set( () => Shortcut, ref shortcut, value );
+                shortcut = value;
                 CheckDirty();
             }
         }
@@ -57,7 +52,7 @@ namespace Wox.Plugin.Runner.Settings
             }
             set
             {
-                Set( () => Path, ref path, value );
+                path = value;
                 CheckDirty();
             }
         }
@@ -71,7 +66,7 @@ namespace Wox.Plugin.Runner.Settings
                 
             }
             set {
-                Set(() => WorkingDirectory, ref workingDirectory, value);
+                workingDirectory = value;
                 CheckDirty();
             }
         }
@@ -85,23 +80,12 @@ namespace Wox.Plugin.Runner.Settings
             }
             set
             {
-                Set( () => ArgumentsFormat, ref argumentsFormat, value );
+                argumentsFormat = value;
                 CheckDirty();
             }
         }
 
-        private bool isDirty = false;
-        public bool IsDirty
-        {
-            get
-            {
-                return isDirty;
-            }
-            set
-            {
-                Set( () => IsDirty, ref isDirty, value );
-            }
-        }
+        public bool IsDirty { get; set; } = false;
 
         public Command GetCommand()
         {

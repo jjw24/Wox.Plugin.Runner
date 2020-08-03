@@ -1,38 +1,29 @@
-﻿using GalaSoft.MvvmLight;
-
+﻿using Flow.Launcher.Plugin;
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Windows;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Forms;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
-
+using MessageBox = System.Windows.Forms.MessageBox;
 using OpenFileDialog = Microsoft.Win32.OpenFileDialog;
-using UserControl = System.Windows.Controls.UserControl;
 
 namespace Wox.Plugin.Runner.Settings
 {
     /// <summary>
     /// Interaction logic for RunnerSettings.xaml
     /// </summary>
-    public partial class RunnerSettings : UserControl
+    public partial class RunnerSettings
     {
-        public RunnerSettings()
+        private readonly RunnerSettingsViewModel viewModel;
+
+        public RunnerSettings(RunnerSettingsViewModel viewModel)
         {
             InitializeComponent();
-        }
 
-        public RunnerSettings( ViewModelBase viewModel )
-            : this()
-        {
-            DataContext = viewModel;
+            this.viewModel = viewModel;
+
+            this.viewModel.LoadCommands();
+
+            lbxCommands.ItemsSource = this.viewModel.Commands;
         }
 
         private void btnBrowsePath_Click( object sender, RoutedEventArgs e )
@@ -53,6 +44,32 @@ namespace Wox.Plugin.Runner.Settings
                     tbWorkDir.Text = dialog.SelectedPath;
                 }
             }
+        }
+
+        private void btnSaveChanges_Click(object sender, RoutedEventArgs e)
+        {
+            if (viewModel.Commands.Any(c => string.IsNullOrEmpty(c.Shortcut) || string.IsNullOrEmpty(c.Path)))
+            {
+                MessageBox.Show("One or more commands is missing a Shortcut or Path. Set a Shortcut and Path and try again.", "", 
+                            MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
+            viewModel.SaveChanges();
+        }
+
+        private void btnAdd_Click(object sender, RoutedEventArgs e)
+        {
+            viewModel.Add();
+            lbxCommands.SelectedItem = viewModel.SelectedCommand;
+        }
+
+        private void bntDelete(object sender, RoutedEventArgs e)
+        {
+            var selectedCommand = lbxCommands.SelectedItem as CommandViewModel;
+
+            if (selectedCommand != null)
+                viewModel.Delete(selectedCommand);
         }
     }
 }

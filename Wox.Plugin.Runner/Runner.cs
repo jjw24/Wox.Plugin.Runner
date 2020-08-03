@@ -1,15 +1,11 @@
 ﻿using Flow.Launcher.Plugin;
-using GalaSoft.MvvmLight.Ioc;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
-using System.Text;
-using System.Windows;
 using System.Windows.Controls;
-using Wox.Plugin.Runner.Services;
 using Wox.Plugin.Runner.Settings;
 
 namespace Wox.Plugin.Runner
@@ -17,15 +13,13 @@ namespace Wox.Plugin.Runner
     public class Runner : IPlugin, ISettingProvider
     {
         PluginInitContext initContext;
+        RunnerSettingsViewModel viewModel;
         bool isGlobal;
 
         public void Init( PluginInitContext context )
         {
-            if ( !SimpleIoc.Default.IsRegistered<IMessageService>() )
-            {
-                SimpleIoc.Default.Register<IMessageService>( () => new MessageService() );
-            }
             initContext = context;
+            viewModel = new RunnerSettingsViewModel(initContext);
             isGlobal = context.CurrentPluginMetadata.ActionKeywords.Contains(Flow.Launcher.Plugin.Query.GlobalPluginWildcardSign);
         }
 
@@ -51,7 +45,7 @@ namespace Wox.Plugin.Runner
 
         public Control CreateSettingPanel()
         {
-            return new RunnerSettings( new RunnerSettingsViewModel( initContext ) );
+            return new RunnerSettings(viewModel);
         }
 
         private bool RunCommand( ActionContext e, List<string> terms, Command command )
@@ -75,8 +69,7 @@ namespace Wox.Plugin.Runner
             }
             catch ( FormatException )
             {
-                SimpleIoc.Default.GetInstance<IMessageService>().ShowErrorMessage(
-                    "There was a problem. Please check the arguments format for the command." );
+                initContext.API.ShowMsg("There was a problem. Please check the arguments format for the command.");
             }
             return true;
         }

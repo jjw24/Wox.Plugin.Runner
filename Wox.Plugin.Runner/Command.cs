@@ -5,7 +5,7 @@ using System.Text;
 
 namespace Wox.Plugin.Runner
 {
-    class Command
+    public class Command
     {
         public string Shortcut { get; set; }
         public string Description { get; set; }
