@@ -1,69 +1,29 @@
-﻿using GalaSoft.MvvmLight;
-using GalaSoft.MvvmLight.Command;
-using GalaSoft.MvvmLight.Ioc;
-using System;
-using System.Collections.Generic;
+﻿using Flow.Launcher.Plugin;
 using System.Collections.ObjectModel;
 using System.Linq;
-using System.Text;
-using Wox.Plugin.Runner.Services;
 
 namespace Wox.Plugin.Runner.Settings
 {
-    class RunnerSettingsViewModel : ViewModelBase
+    public class RunnerSettingsViewModel
     {
-        private readonly PluginInitContext pluginContext;
+        private readonly PluginInitContext context;
 
-        internal RunnerSettingsViewModel()
+        public RunnerSettingsViewModel() { }
+
+        public RunnerSettingsViewModel( PluginInitContext context )
         {
-            if ( IsInDesignMode )
-            {
-                RunnerConfiguration.Loader = new DesignTimeConfigurationLoader();
-            }
-            LoadCommands();
-            if ( IsInDesignMode )
-            {
-                SelectedCommand = Commands.First();
-                SelectedCommand.Shortcut = "Dirty";
-            }
+            this.context = context;
         }
 
-        public RunnerSettingsViewModel( PluginInitContext context ) : this()
-        {
-            pluginContext = context;
-        }
-
-        private void LoadCommands()
+        public void LoadCommands()
         {
             Commands = new ObservableCollection<CommandViewModel>(
                 RunnerConfiguration.Commands.Select( c => new CommandViewModel( c ) ) );
         }
 
-        private ObservableCollection<CommandViewModel> commands;
-        public ObservableCollection<CommandViewModel> Commands
-        {
-            get
-            {
-                return commands;
-            }
-            set
-            {
-                Set( () => Commands, ref commands, value );
-            }
-        }
+        public ObservableCollection<CommandViewModel> Commands { get; set; }
 
-        private CommandViewModel selectedCommand;
-        public CommandViewModel SelectedCommand
-        {
-            get
-            {
-                return selectedCommand;
-            }
-            set
-            {
-                Set( () => SelectedCommand, ref selectedCommand, value );
-            }
-        }
+        public CommandViewModel SelectedCommand { get; set; }
 
         public bool CommandIsSelected
         {
@@ -73,61 +33,26 @@ namespace Wox.Plugin.Runner.Settings
             }
         }
 
-        private RelayCommand add;
-        public RelayCommand Add
+        public void Add()
         {
-            get
-            {
-                return add
-                    ?? ( add = new RelayCommand(
-                    () =>
-                    {
-                        var cmd = new CommandViewModel( new Command() );
-                        Commands.Add( cmd );
-                        SelectedCommand = cmd;
-                    } ) );
-            }
+            var cmd = new CommandViewModel(new Command());
+            Commands.Add(cmd);
+            SelectedCommand = cmd;
         }
 
-        private RelayCommand delete;
-        public RelayCommand Delete
+        public void SaveChanges()
         {
-            get
-            {
-                return delete
-                    ?? ( delete = new RelayCommand(
-                    () =>
-                    {
-                        if ( SelectedCommand != null )
-                        {
-                            Commands.Remove( SelectedCommand );
-                            SelectedCommand = null;
-                        }
-                    } ) );
-            }
+            RunnerConfiguration.Commands = Commands.Select(c => c.GetCommand());
+
+            context.API.ShowMsg("Your changes have been saved!");
         }
 
-        private RelayCommand saveChanges;
-        public RelayCommand SaveChanges
+        public void Delete(CommandViewModel cmdToDelete)
         {
-            get
+            if (cmdToDelete != null)
             {
-                return saveChanges
-                    ?? ( saveChanges = new RelayCommand(
-                    () =>
-                    {
-                        if ( Commands.Any( c => String.IsNullOrEmpty( c.Shortcut ) || String.IsNullOrEmpty( c.Path ) ) )
-                        {
-                            SimpleIoc.Default.GetInstance<IMessageService>()
-                            .ShowErrorMessage( 
-                                "One or more commands is missing a Shortcut or Path. Set a Shortcut and Path and try again." );
-                        }
-                        else
-                        {
-                            RunnerConfiguration.Commands = Commands.Select( c => c.GetCommand() );
-                            SimpleIoc.Default.GetInstance<IMessageService>().ShowMessage( "Your changes have been saved!" );
-                        }
-                    } ) );
+                Commands.Remove(cmdToDelete);
+                SelectedCommand = null;
             }
         }
     }

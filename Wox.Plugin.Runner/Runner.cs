@@ -1,31 +1,26 @@
-﻿using GalaSoft.MvvmLight.Ioc;
+﻿using Flow.Launcher.Plugin;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
-using System.Text;
-using System.Windows;
 using System.Windows.Controls;
-using Wox.Plugin.Runner.Services;
 using Wox.Plugin.Runner.Settings;
 
 namespace Wox.Plugin.Runner
 {
     public class Runner : IPlugin, ISettingProvider
     {
-        PluginInitContext initContext;
+        internal static PluginInitContext Context;
+        RunnerSettingsViewModel viewModel;
         bool isGlobal;
 
         public void Init( PluginInitContext context )
         {
-            if ( !SimpleIoc.Default.IsRegistered<IMessageService>() )
-            {
-                SimpleIoc.Default.Register<IMessageService>( () => new MessageService() );
-            }
-            initContext = context;
-            isGlobal = context.CurrentPluginMetadata.ActionKeywords.Contains(Plugin.Query.GlobalPluginWildcardSign);
+            Context = context;
+            viewModel = new RunnerSettingsViewModel(Context);
+            isGlobal = context.CurrentPluginMetadata.ActionKeywords.Contains(Flow.Launcher.Plugin.Query.GlobalPluginWildcardSign);
         }
 
         public List<Result> Query( Query query )
@@ -50,7 +45,7 @@ namespace Wox.Plugin.Runner
 
         public Control CreateSettingPanel()
         {
-            return new RunnerSettings( new RunnerSettingsViewModel( initContext ) );
+            return new RunnerSettings(viewModel);
         }
 
         private bool RunCommand( ActionContext e, List<string> terms, Command command )
@@ -74,8 +69,7 @@ namespace Wox.Plugin.Runner
             }
             catch ( FormatException )
             {
-                SimpleIoc.Default.GetInstance<IMessageService>().ShowErrorMessage(
-                    "There was a problem. Please check the arguments format for the command." );
+                Context.API.ShowMsg("There was a problem. Please check the arguments format for the command.");
             }
             return true;
         }

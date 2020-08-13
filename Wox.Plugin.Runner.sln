@@ -1,24 +1,15 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 2013
-VisualStudioVersion = 12.0.31101.0
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.30128.74
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Wox.Plugin.Runner", "Wox.Plugin.Runner\Wox.Plugin.Runner.csproj", "{4EB7F8F4-97BD-42A6-B38F-349B260398DE}"
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{F106385F-ECC6-4442-A0AE-DABBF9406384}"
-	ProjectSection(SolutionItems) = preProject
-		.nuget\NuGet.Config = .nuget\NuGet.Config
-		.nuget\NuGet.exe = .nuget\NuGet.exe
-		.nuget\NuGet.targets = .nuget\NuGet.targets
-	EndProjectSection
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Wox.Plugin.Runner", "Wox.Plugin.Runner\Wox.Plugin.Runner.csproj", "{4EB7F8F4-97BD-42A6-B38F-349B260398DE}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{687211DD-FAAC-44A8-B25D-2EDD64E80991}"
 	ProjectSection(SolutionItems) = preProject
 		demo.gif = demo.gif
 		README.md = README.md
 	EndProjectSection
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Wox.Plugin.Runner.Configurator", "Wox.Plugin.Runner.Configurator\Wox.Plugin.Runner.Configurator.csproj", "{57177D73-E0EA-4C5F-97C1-056F0AB755D1}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -30,12 +21,11 @@ Global
 		{4EB7F8F4-97BD-42A6-B38F-349B260398DE}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4EB7F8F4-97BD-42A6-B38F-349B260398DE}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{4EB7F8F4-97BD-42A6-B38F-349B260398DE}.Release|Any CPU.Build.0 = Release|Any CPU
-		{57177D73-E0EA-4C5F-97C1-056F0AB755D1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{57177D73-E0EA-4C5F-97C1-056F0AB755D1}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{57177D73-E0EA-4C5F-97C1-056F0AB755D1}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{57177D73-E0EA-4C5F-97C1-056F0AB755D1}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {A8CBAF43-79B2-4361-A9D4-E09A2D6E2126}
 	EndGlobalSection
 EndGlobal
