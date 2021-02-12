@@ -14,33 +14,42 @@ namespace Wox.Plugin.Runner
     {
         internal static PluginInitContext Context;
         RunnerSettingsViewModel viewModel;
-        bool isGlobal;
 
         public void Init( PluginInitContext context )
         {
             Context = context;
             viewModel = new RunnerSettingsViewModel(Context);
-            isGlobal = context.CurrentPluginMetadata.ActionKeywords.Contains(Flow.Launcher.Plugin.Query.GlobalPluginWildcardSign);
         }
 
         public List<Result> Query( Query query )
         {
             var results = new List<Result>();
-            if (query.Terms.Length < 2 && !this.isGlobal) return results;
 
-            var commandName = query.Terms[isGlobal ? 0 : 1];
-            var terms = query.Terms.ToList();
-            terms.RemoveAt(0); // remove command name
-            var matches = RunnerConfiguration.Commands.Where( c => c.Shortcut.StartsWith( commandName ) )
-                .Select( c => new Result()
-                {
-                    Score = int.MaxValue / 2,
-                    Title = c.Description + " " + String.Join( " ", terms ),
-                    Action = e => RunCommand( e, terms, c ),
-                    IcoPath = c.Path
-                } );
-            results.AddRange( matches );
-            return results;
+            if (string.IsNullOrEmpty(query.Search))
+                return results;
+
+            var search = query.Search;
+
+            var splittedSearch = search.Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
+
+            var shortcut = splittedSearch[0];
+
+            var terms = splittedSearch[1..];
+
+            var matches = 
+                RunnerConfiguration.Commands
+                .Where(c => c.Shortcut == shortcut)
+                .Select(c => 
+                    new Result()
+                    {
+                        Score = 50,
+                        Title = "Run " + (c.Description ?? $"shortcut {c.Shortcut}") + 
+                            (terms.Count() > 0 ? $" with arguments: {string.Join(" ", terms)}" : string.Empty) ,
+                        SubTitle = c.Description,
+                        Action = e => RunCommand(e, terms, c),
+                        IcoPath = c.Path
+                    });
+            return matches.ToList();
         }
 
         public Control CreateSettingPanel()
@@ -48,17 +57,16 @@ namespace Wox.Plugin.Runner
             return new RunnerSettings(viewModel);
         }
 
-        private bool RunCommand( ActionContext e, List<string> terms, Command command )
+        private bool RunCommand( ActionContext e, IEnumerable<string> terms, Command command )
         {
             try
             {
-                var args = GetProcessArguments( command, terms );
+                var args = GetProcessArguments(command, terms);
                 var startInfo = new ProcessStartInfo(args.FileName, args.Arguments);
                 if (args.WorkingDirectory != null) {
                     startInfo.WorkingDirectory = args.WorkingDirectory;
                 }
                 Process.Start(startInfo);
-                // Process.Start( args.FileName, args.Arguments );
             }
             catch ( Win32Exception w32Ex )
             {
@@ -74,22 +82,12 @@ namespace Wox.Plugin.Runner
             return true;
         }
 
-        private ProcessArguments GetProcessArguments( Command c, List<string> terms )
+        private ProcessArguments GetProcessArguments( Command c, IEnumerable<string> terms )
         {
-            var argString = String.Empty;
-            if ( !String.IsNullOrEmpty( c.ArgumentsFormat ) )
-            {
-                var arguments = terms;
+            var argString = string.Empty;
+            if ( !string.IsNullOrEmpty( c.ArgumentsFormat ) )
+                argString = string.Format(c.ArgumentsFormat, terms.ToArray());
 
-                if ( !isGlobal )
-                    arguments.RemoveAt( 0 );
-                if ( arguments.Count > 0 )
-                {
-                    argString = String.Format( c.ArgumentsFormat, arguments.ToArray() );
-                }
-                else
-                    argString = String.Empty;
-            }
             var workingDir = c.WorkingDirectory;
             if (string.IsNullOrEmpty(workingDir)) {
                 // Use directory where executable is based.
