@@ -85,8 +85,18 @@ namespace Wox.Plugin.Runner
         private ProcessArguments GetProcessArguments( Command c, IEnumerable<string> terms )
         {
             var argString = string.Empty;
-            if ( !string.IsNullOrEmpty( c.ArgumentsFormat ) )
-                argString = string.Format(c.ArgumentsFormat, terms.ToArray());
+
+            if (!string.IsNullOrEmpty(c.ArgumentsFormat))
+            {
+                if (c.ArgumentsFormat.EndsWith("{*}"))
+                {
+                    argString = c.ArgumentsFormat.Remove(c.ArgumentsFormat.Length-3, 3) + string.Join(" ", terms);
+                }
+                else 
+                {
+                    argString = string.Format(c.ArgumentsFormat, terms.ToArray());
+                }
+            }
 
             var workingDir = c.WorkingDirectory;
             if (string.IsNullOrEmpty(workingDir)) {

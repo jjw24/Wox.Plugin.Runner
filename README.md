@@ -3,6 +3,8 @@ This is a port of the Wox plugin [Runner](https://github.com/jessebarocio/Wox.Pl
 
 This port is intended to be used for [Flow Launcher](https://github.com/Flow-Launcher/Flow.Launcher). It will not work for Wox.
 
+New: Use {0} in your setting argument to allow infinite arguments passed through the query window. For this to work the setting argument needs to end with {0}
+
 To use this plugin, from your Flow Launcher search `pm install runner`
 
 Changes contained in this port:
