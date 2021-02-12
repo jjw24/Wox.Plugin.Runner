@@ -6,7 +6,7 @@
   "Author": "Jesse Barocio (@jessebarocio)",
   "Version": "2.0.2",
   "Language": "csharp",
-  "Website": "http://www.barocio.net",
+  "Website": "https://github.com/jjw24/Wox.Plugin.Runner",
   "IcoPath": "Images\\gear.png",
   "ExecuteFileName": "Wox.Plugin.Runner.dll"
 }
