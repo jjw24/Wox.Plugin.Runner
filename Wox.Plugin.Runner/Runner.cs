@@ -26,7 +26,20 @@ namespace Wox.Plugin.Runner
             var results = new List<Result>();
 
             if (string.IsNullOrEmpty(query.Search))
-                return results;
+            {
+                return
+                    RunnerConfiguration.Commands
+                    .Select(c =>
+                        new Result()
+                        {
+                            Score = 50,
+                            Title = "Run " + (c.Description ?? $"shortcut {c.Shortcut}"),
+                            SubTitle = c.Description,
+                            Action = e => RunCommand(e, new List<string>(), c),
+                            IcoPath = c.Path
+                        })
+                    .ToList();
+            }
 
             var search = query.Search;
 
@@ -36,7 +49,7 @@ namespace Wox.Plugin.Runner
 
             var terms = splittedSearch[1..];
 
-            var matches = 
+            return
                 RunnerConfiguration.Commands
                 .Where(c => c.Shortcut == shortcut)
                 .Select(c => 
@@ -48,8 +61,8 @@ namespace Wox.Plugin.Runner
                         SubTitle = c.Description,
                         Action = e => RunCommand(e, terms, c),
                         IcoPath = c.Path
-                    });
-            return matches.ToList();
+                    })
+                .ToList();
         }
 
         public Control CreateSettingPanel()
