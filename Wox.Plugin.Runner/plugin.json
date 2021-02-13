@@ -4,7 +4,7 @@
   "Name": "Plugin Runner",
   "Description": "Create simple command shortcuts",
   "Author": "Jesse Barocio (@jessebarocio)",
-  "Version": "2.0.2",
+  "Version": "2.1.0",
   "Language": "csharp",
   "Website": "https://github.com/jjw24/Wox.Plugin.Runner",
   "IcoPath": "Images\\gear.png",

@@ -26,7 +26,20 @@ namespace Wox.Plugin.Runner
             var results = new List<Result>();
 
             if (string.IsNullOrEmpty(query.Search))
-                return results;
+            {
+                return
+                    RunnerConfiguration.Commands
+                    .Select(c =>
+                        new Result()
+                        {
+                            Score = 50,
+                            Title = "Run " + (c.Description ?? $"shortcut {c.Shortcut}"),
+                            SubTitle = c.Description,
+                            Action = e => RunCommand(e, new List<string>(), c),
+                            IcoPath = c.Path
+                        })
+                    .ToList();
+            }
 
             var search = query.Search;
 
@@ -36,7 +49,7 @@ namespace Wox.Plugin.Runner
 
             var terms = splittedSearch[1..];
 
-            var matches = 
+            return
                 RunnerConfiguration.Commands
                 .Where(c => c.Shortcut == shortcut)
                 .Select(c => 
@@ -48,8 +61,8 @@ namespace Wox.Plugin.Runner
                         SubTitle = c.Description,
                         Action = e => RunCommand(e, terms, c),
                         IcoPath = c.Path
-                    });
-            return matches.ToList();
+                    })
+                .ToList();
         }
 
         public Control CreateSettingPanel()
@@ -85,8 +98,18 @@ namespace Wox.Plugin.Runner
         private ProcessArguments GetProcessArguments( Command c, IEnumerable<string> terms )
         {
             var argString = string.Empty;
-            if ( !string.IsNullOrEmpty( c.ArgumentsFormat ) )
-                argString = string.Format(c.ArgumentsFormat, terms.ToArray());
+
+            if (!string.IsNullOrEmpty(c.ArgumentsFormat))
+            {
+                if (c.ArgumentsFormat.EndsWith("{*}"))
+                {
+                    argString = c.ArgumentsFormat.Remove(c.ArgumentsFormat.Length-3, 3) + string.Join(" ", terms);
+                }
+                else 
+                {
+                    argString = string.Format(c.ArgumentsFormat, terms.ToArray());
+                }
+            }
 
             var workingDir = c.WorkingDirectory;
             if (string.IsNullOrEmpty(workingDir)) {
