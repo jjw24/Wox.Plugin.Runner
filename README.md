@@ -7,6 +7,9 @@ New: Use {0} in your setting argument to allow infinite arguments passed through
 
 To use this plugin, from your Flow Launcher search `pm install runner`
 
+**Important:**
+The original Wox plugin saves its setting file (commands.json) in `%localappdata%\Wox.Plugin.Runner`, so to keep using the same commands you had, you need to move that file manually to the location above inside the `Wox.Plugin.Runner\Settings` folder after installing.
+
 Changes contained in this port:
 
 - Upgraded to .Net Core 3.1
