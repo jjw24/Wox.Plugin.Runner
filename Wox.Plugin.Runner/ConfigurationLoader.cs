@@ -4,13 +4,14 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Text.Json;
 
 namespace Wox.Plugin.Runner
 {
     interface IConfigurationLoader
     {
         IEnumerable<Command> LoadCommands();
-        void SaveCommands( IEnumerable<Command> commands );
+        void SaveCommands(IEnumerable<Command> commands);
     }
 
     class ConfigurationLoader : IConfigurationLoader
@@ -20,22 +21,22 @@ namespace Wox.Plugin.Runner
 
         public ConfigurationLoader()
         {
-            Directory.CreateDirectory( configPath );
-            if ( !File.Exists( configFile ) )
+            Directory.CreateDirectory(configPath);
+            if (!File.Exists(configFile))
             {
-                File.Create( configFile ).Close();
+                File.Create(configFile).Close();
             }
         }
 
         public IEnumerable<Command> LoadCommands()
         {
-            var commands = JsonConvert.DeserializeObject<IEnumerable<Command>>( File.ReadAllText( configFile ) );
+            var commands = JsonSerializer.Deserialize<IEnumerable<Command>>(File.ReadAllText(configFile));
             return commands ?? new List<Command>();
         }
 
-        public void SaveCommands( IEnumerable<Command> commands )
+        public void SaveCommands(IEnumerable<Command> commands)
         {
-            File.WriteAllText( configFile, JsonConvert.SerializeObject( commands ) );
+            File.WriteAllText(configFile, JsonSerializer.Serialize(commands));
         }
     }
 }
