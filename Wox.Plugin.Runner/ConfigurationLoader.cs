@@ -15,11 +15,13 @@ namespace Wox.Plugin.Runner
 
     class ConfigurationLoader : IConfigurationLoader
     {
-        readonly static string configPath = Path.Combine(Runner.Context.CurrentPluginMetadata.PluginDirectory, "Settings");
+        readonly static string configPath = Environment.ExpandEnvironmentVariables(
+            @$"%appdata%\FlowLauncher\Settings\Plugins\{Runner.Context.CurrentPluginMetadata.Name}");
         readonly static string configFile = Path.Combine(configPath, "commands.json");
 
         public ConfigurationLoader()
         {
+
             Directory.CreateDirectory(configPath);
             if (!File.Exists(configFile))
             {
@@ -29,8 +31,11 @@ namespace Wox.Plugin.Runner
 
         public IEnumerable<Command> LoadCommands()
         {
-            var commands = JsonSerializer.Deserialize<IEnumerable<Command>>(File.ReadAllText(configFile));
-            return commands ?? new List<Command>();
+            var text = File.ReadAllText(configFile);
+            if (!string.IsNullOrEmpty(text))
+                return JsonSerializer.Deserialize<IEnumerable<Command>>(text);
+
+            return new List<Command>();
         }
 
         public void SaveCommands(IEnumerable<Command> commands)
