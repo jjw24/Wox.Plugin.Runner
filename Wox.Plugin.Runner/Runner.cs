@@ -102,6 +102,7 @@ namespace Wox.Plugin.Runner
             {
                 var args = GetProcessArguments(command, terms);
                 var startInfo = new ProcessStartInfo(args.FileName, args.Arguments);
+                startInfo.UseShellExecute = true;
                 if (args.WorkingDirectory != null)
                 {
                     startInfo.WorkingDirectory = args.WorkingDirectory;
