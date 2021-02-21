@@ -20,14 +20,14 @@ jobs:
         id: version
         uses: notiz-dev/github-action-json-property@release
         with: 
-          path: 'plugin.json'
+          path: 'Wox.Plugin.Runner/plugin.json'
           prop_path: 'Version'
       - run: echo ${{steps.version.outputs.prop}} 
       - name: Build
         run: |
-          dotnet publish 'Wox.Plugin.Runner.csproj' --framework netcoreapp3.1  -c Release -o "Wox.Plugin.Runner"
-          7z a -tzip "Wox.Plugin.Runner.zip" "./Wox.Plugin.Runner/*"
-          rm -r "Wox.Plugin.Runner"
+          dotnet publish 'Wox.Plugin.Runner/Wox.Plugin.Runner.csproj' --framework netcoreapp3.1  -c Release -o "Output/Wox.Plugin.Runner"
+          7z a -tzip "Wox.Plugin.Runner.zip" "OUtput/Wox.Plugin.Runner/*"
+          rm -r "Output/Wox.Plugin.Runner"
       - name: Publish
         uses: softprops/action-gh-release@v1
         with:
