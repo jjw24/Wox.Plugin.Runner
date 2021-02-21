@@ -25,9 +25,9 @@ jobs:
       - run: echo ${{steps.version.outputs.prop}} 
       - name: Build
         run: |
-          dotnet publish 'Wox.Plugin.Runner/Wox.Plugin.Runner.csproj' --framework netcoreapp3.1  -c Release -o "Wox.Plugin.Runner"
-          7z a -tzip "Wox.Plugin.Runner.zip" "Wox.Plugin.Runner/*"
-          rm -r "Wox.Plugin.Runner"
+          dotnet publish 'Wox.Plugin.Runner/Wox.Plugin.Runner.csproj' --framework netcoreapp3.1  -c Release -o "Runner"
+          7z a -tzip "Wox.Plugin.Runner.zip" "Runner/*"
+          rm -r "Runner"
       - name: Publish
         uses: softprops/action-gh-release@v1
         with:
