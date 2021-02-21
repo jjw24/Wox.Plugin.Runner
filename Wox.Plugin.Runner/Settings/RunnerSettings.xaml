@@ -29,10 +29,10 @@
                 <RowDefinition Height="50" />
             </Grid.RowDefinitions>
             <Grid.ColumnDefinitions>
-                <ColumnDefinition />
-                <ColumnDefinition />
+                <ColumnDefinition/>
+                <ColumnDefinition/>
             </Grid.ColumnDefinitions>
-            <ListBox Name="lbxCommands" SelectedItem="{Binding SelectedCommand}">
+            <ListBox Grid.Column="0" Name="lbxCommands" SelectedItem="{Binding SelectedCommand}">
                 <ListBox.ItemTemplate>
                     <DataTemplate>
                         <StackPanel Margin="3">
@@ -49,19 +49,32 @@
                     </DataTemplate>
                 </ListBox.ItemTemplate>
             </ListBox>
-            <Grid Grid.Column="1" Visibility="{Binding SelectedCommand, Converter={StaticResource nullToVisibilityConverter}}">
-                <Label Content="Description:" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top"/>
-                <TextBox Height="23" Margin="88,3,10,0" Text="{Binding SelectedCommand.Description, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Top"/>
-                <Label Content="Shortcut:" HorizontalAlignment="Left" Margin="10,51,0,0" VerticalAlignment="Top"/>
-                <TextBox Height="23" Margin="88,45,10,0" Text="{Binding SelectedCommand.Shortcut, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Top"/>
-                <Label Content="Path:" HorizontalAlignment="Left" Margin="10,94,0,0" VerticalAlignment="Top"/>
-                <TextBox Name="tbPath" Height="23" Margin="88,87,10,0" Text="{Binding SelectedCommand.Path, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Top"/>
-                <Button Content="Browse" Name="btnBrowsePath" Margin="210,134,10,0" VerticalAlignment="Top" Click="btnBrowsePath_Click" />
-                <Label Content="Working dir:" HorizontalAlignment="Left" Margin="10,187,0,0" VerticalAlignment="Top"/>
-                <TextBox Name="tbWorkDir" Height="23" Margin="88,181,10,0" Text="{Binding SelectedCommand.WorkingDirectory, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Top"/>
-                <Button Content="Browse" Name="btnBrowseWorkDir" Margin="210,229,10,0" VerticalAlignment="Top" Click="btnBrowseWorkDir_Click" />
-                <Label Content="Arguments:" HorizontalAlignment="Left" Margin="10,286,0,0" VerticalAlignment="Top"/>
-                <TextBox Height="23" Margin="88,280,10,0" Text="{Binding SelectedCommand.ArgumentsFormat, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Top"/>
+            <Grid Grid.Column="1" Grid.ColumnSpan="2" Visibility="{Binding SelectedCommand, Converter={StaticResource nullToVisibilityConverter}}">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="4*"/>
+                    <ColumnDefinition Width="6*"/>
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                </Grid.RowDefinitions>
+                <Label Grid.Row="0" Content="Description:" HorizontalAlignment="Left" Margin="5,10,0,0" VerticalAlignment="Top"/>
+                <TextBox  Grid.Row="0" Grid.Column="1" Height="23" Margin="5,3,10,0" Text="{Binding SelectedCommand.Description, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Top"/>
+                <Label  Grid.Row="1"  Content="Shortcut:" HorizontalAlignment="Left" Margin="5,10,0,0" VerticalAlignment="Top"/>
+                <TextBox  Grid.Row="1"  Grid.Column="1" Height="23" Margin="5,10,10,0" Text="{Binding SelectedCommand.Shortcut, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Top"/>
+                <Label  Grid.Row="2"  Content="Path:" HorizontalAlignment="Left" Margin="5,10,0,0" VerticalAlignment="Top"/>
+                <TextBox  Grid.Row="2"  Grid.Column="1" Name="tbPath" Height="23" Margin="5,10,10,0" Text="{Binding SelectedCommand.Path, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Top"/>
+                <Button  Grid.Row="3"  Grid.Column="1"  HorizontalAlignment="Right" Content="Browse" Name="btnBrowsePath" Margin="0,10,10,0" VerticalAlignment="Top" Click="btnBrowsePath_Click" />
+                <Label  Grid.Row="4"  Content="Working dir:" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top"/>
+                <TextBox  Grid.Row="4"  Grid.Column="1" Name="tbWorkDir" Height="23" Margin="5,10,10,0" Text="{Binding SelectedCommand.WorkingDirectory, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Top"/>
+                <Button  Grid.Row="5"  Grid.Column="1" HorizontalAlignment="Right" Content="Browse" Name="btnBrowseWorkDir" Margin="0,10,10,0" VerticalAlignment="Top" Click="btnBrowseWorkDir_Click" />
+                <Label  Grid.Row="6"  Content="Arguments:" HorizontalAlignment="Left" Margin="5,10,0,0" VerticalAlignment="Top"/>
+                <TextBox  Grid.Row="6"  Grid.Column="1" Height="23" Margin="5,10,10,0" Text="{Binding SelectedCommand.ArgumentsFormat, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Top"/>
             </Grid>
             <Grid Grid.Row="1" Margin="10,10,0,0">
                 <Grid.ColumnDefinitions>
