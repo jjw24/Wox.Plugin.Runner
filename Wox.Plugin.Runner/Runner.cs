@@ -1,4 +1,4 @@
-﻿using Flow.Launcher.Plugin;
+using Flow.Launcher.Plugin;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -23,12 +23,15 @@ namespace Wox.Plugin.Runner
 
         public List<Result> Query(Query query)
         {
+            var results = new List<Result>();
+
             var search = query.Search;
 
+            // triggers when an action keyword is set
+            // shows all possible plugin commands
             if (string.IsNullOrEmpty(search))
             {
-                return
-                    RunnerConfiguration.Commands
+                results = RunnerConfiguration.Commands
                     .Select(c =>
                         new Result()
                         {
@@ -43,34 +46,38 @@ namespace Wox.Plugin.Runner
                             },
                             IcoPath = c.Path
                         })
-                    .ToList();
+                        .ToList();
             }
-
-            var splittedSearch = search.Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
-
-            var shortcut = splittedSearch[0];
-
-            var terms = splittedSearch[1..];
-
-            var resultList = RunnerConfiguration.Commands
-                            .Where(c => c.Shortcut == shortcut)
-                            .Select(c => new Result()
-                            {
-                                Score = 50,
-                                Title = "Run " + (c.Description ?? $"shortcut {c.Shortcut}") +
-                                        (terms.Count() > 0 ? $" with arguments: {string.Join(" ", terms)}" : string.Empty),
-                                SubTitle = c.Description,
-                                Action = e => RunCommand(e, terms, c),
-                                IcoPath = c.Path
-                            })
-                           .ToList();
-
-            if (!resultList.Any())
+            // triggers when no action keyword is set
+            else
             {
-                resultList = FuzzySearchCommand(shortcut, terms);
+                var splittedSearch = search.Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
+
+                var shortcut = splittedSearch[0];
+
+                var terms = splittedSearch[1..];
+
+                // exact match found and shows to the user command is being run with arguments
+                results = RunnerConfiguration.Commands.Where(c => c.Shortcut == shortcut)
+                    .Select(c => new Result()
+                    {
+                        Score = 50,
+                        Title = "Run " + (c.Description ?? $"shortcut {c.Shortcut}") +
+                                (terms.Count() > 0 ? $" with arguments: {string.Join(" ", terms)}" : string.Empty),
+                        SubTitle = c.Description,
+                        Action = e => RunCommand(e, terms, c),
+                        IcoPath = c.Path
+                    })
+                    .ToList();
+
+                // no exact match found, tries to find a fuzzy match against existing plugin commands
+                if (!results.Any())
+                {
+                    results = FuzzySearchCommand(shortcut, terms);
+                }
             }
 
-            return resultList;
+            return results;
         }
 
         private List<Result> FuzzySearchCommand(string shortcut, string[] terms)
