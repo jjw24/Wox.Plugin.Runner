@@ -23,9 +23,9 @@ namespace Wox.Plugin.Runner
 
         public List<Result> Query(Query query)
         {
-            var results = new List<Result>();
+            var search = query.Search;
 
-            if (string.IsNullOrEmpty(query.Search))
+            if (string.IsNullOrEmpty(search))
             {
                 return
                     RunnerConfiguration.Commands
@@ -35,17 +35,16 @@ namespace Wox.Plugin.Runner
                             Score = 50,
                             Title = c.Shortcut,
                             SubTitle = c.Description,
-                            Action = _ =>
+                            Action = e =>
                             {
-                                Context.API.ChangeQuery($"{Context.CurrentPluginMetadata.ActionKeyword} {c.Shortcut} ");
-                                return false;
+                                var splittedSearch = c.Shortcut.Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
+
+                                return RunCommand(e, splittedSearch, c);
                             },
                             IcoPath = c.Path
                         })
                     .ToList();
             }
-
-            var search = query.Search;
 
             var splittedSearch = search.Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
 
@@ -74,18 +73,14 @@ namespace Wox.Plugin.Runner
             return resultList;
         }
 
-        private static List<Result> FuzzySearchCommand(string shortcut, string[] terms)
+        private List<Result> FuzzySearchCommand(string shortcut, string[] terms)
         {
             return RunnerConfiguration.Commands.Select(c => new Result()
             {
                 Score = Context.API.FuzzySearch(shortcut, c.Shortcut).Score,
                 Title = c.Shortcut,
                 SubTitle = c.Description,
-                Action = _ =>
-                {
-                    Context.API.ChangeQuery($"{Context.CurrentPluginMetadata.ActionKeyword} {c.Shortcut} {string.Join(' ', terms)}");
-                    return false;
-                },
+                Action = e => RunCommand(e, terms, c),
                 IcoPath = c.Path
             }).Where(r => r.Score > 0)
             .ToList();
