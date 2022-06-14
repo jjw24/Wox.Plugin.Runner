@@ -129,7 +129,7 @@ namespace Wox.Plugin.Runner
 
             if (!string.IsNullOrEmpty(c.ArgumentsFormat))
             {
-                // command's arguments HAS flag allowing user to manually pass infinite amount of arguments
+                // command's arguments HAS flag, thus user is able to manually pass infinite amount of arguments
                 if (c.ArgumentsFormat.EndsWith("{*}"))
                 {   
                     // remove '{*}' flag from arguments
