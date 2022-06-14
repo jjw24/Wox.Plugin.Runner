@@ -40,9 +40,7 @@ namespace Wox.Plugin.Runner
                             SubTitle = c.Description,
                             Action = e =>
                             {
-                                var splittedSearch = c.Shortcut.Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
-
-                                return RunCommand(e, splittedSearch, c);
+                                return RunCommand(e, c);
                             },
                             IcoPath = c.Path
                         })
@@ -65,7 +63,7 @@ namespace Wox.Plugin.Runner
                         Title = "Run " + (c.Description ?? $"shortcut {c.Shortcut}") +
                                 (terms.Count() > 0 ? $" with arguments: {string.Join(" ", terms)}" : string.Empty),
                         SubTitle = c.Description,
-                        Action = e => RunCommand(e, terms, c),
+                        Action = e => RunCommand(e, c, terms),
                         IcoPath = c.Path
                     })
                     .ToList();
@@ -87,7 +85,7 @@ namespace Wox.Plugin.Runner
                 Score = Context.API.FuzzySearch(shortcut, c.Shortcut).Score,
                 Title = c.Shortcut,
                 SubTitle = c.Description,
-                Action = e => RunCommand(e, terms, c),
+                Action = e => RunCommand(e, c, terms),
                 IcoPath = c.Path
             }).Where(r => r.Score > 0)
             .ToList();
@@ -98,7 +96,7 @@ namespace Wox.Plugin.Runner
             return new RunnerSettings(viewModel);
         }
 
-        private bool RunCommand(ActionContext e, IEnumerable<string> terms, Command command)
+        private bool RunCommand(ActionContext e, Command command, IEnumerable<string> terms = null)
         {
             try
             {
@@ -131,13 +129,17 @@ namespace Wox.Plugin.Runner
 
             if (!string.IsNullOrEmpty(c.ArgumentsFormat))
             {
+                // command's arguments HAS flag allowing user to manually pass infinite amount of arguments
                 if (c.ArgumentsFormat.EndsWith("{*}"))
-                {
-                    argString = c.ArgumentsFormat.Remove(c.ArgumentsFormat.Length - 3, 3) + string.Join(" ", terms);
+                {   
+                    // remove '{*}' flag from arguments
+                    argString = c.ArgumentsFormat.Remove(c.ArgumentsFormat.Length - 3, 3);
+                    // add user specified arguments to the arguments to be passed
+                    argString = argString + string.Join(" ", terms);
                 }
-                else
+                // command's arguments does NOT have flag, thus will not accept additional arguments
                 {
-                    argString = string.Format(c.ArgumentsFormat, terms.ToArray());
+                    argString = c.ArgumentsFormat;
                 }
             }
 
