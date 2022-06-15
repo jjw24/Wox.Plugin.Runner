@@ -129,7 +129,7 @@ namespace Wox.Plugin.Runner
 
             if (!string.IsNullOrEmpty(c.ArgumentsFormat))
             {
-                // command's arguments HAS flag, thus user is able to manually pass infinite amount of arguments
+                // command's arguments HAS an infinite flag, thus user is able to manually pass infinite amount of arguments
                 if (c.ArgumentsFormat.EndsWith("{*}"))
                 {   
                     // remove '{*}' flag from arguments
@@ -137,9 +137,13 @@ namespace Wox.Plugin.Runner
                     // add user specified arguments to the arguments to be passed
                     argString = argString + string.Join(" ", terms);
                 }
-                // command's arguments does NOT have flag, thus will not accept additional arguments
+                // command's arguments HAS flag/s, thus user is able to manually pass in arguments e.g. settings: {0} {1}
+                // or command's arguments HAS set normal text arguments e.g. settings: -h myremotecomp -p 22
+                else
                 {
-                    argString = c.ArgumentsFormat;
+                    argString = terms is not null 
+                                    ? string.Format(c.ArgumentsFormat, terms.ToArray()) 
+                                    : c.ArgumentsFormat;
                 }
             }
 
