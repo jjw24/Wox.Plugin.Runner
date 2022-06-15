@@ -141,7 +141,7 @@ namespace Wox.Plugin.Runner
                 // or command's arguments HAS set normal text arguments e.g. settings: -h myremotecomp -p 22
                 else
                 {
-                    argString = terms is not null 
+                    argString = terms != null 
                                     ? string.Format(c.ArgumentsFormat, terms.ToArray()) 
                                     : c.ArgumentsFormat;
                 }

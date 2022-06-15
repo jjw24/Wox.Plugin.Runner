@@ -22,5 +22,5 @@ jobs:
       - name: Upload Artifact
         uses: actions/upload-artifact@v2
         with:
-          name: WindowsWalker
-          path: ./Wox.Plugin.Runner/Output/Release/
+          name: Runner
+          path: ./Output/Release/
