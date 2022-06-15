@@ -10,9 +10,11 @@ Use {*} flag in your setting argument to allow infinite arguments passed through
 Use {0} in your setting argument to pass just one argument. For this to work the setting argument needs to end with `{0}`, e.g. `-p {0}`. You can also specify multiple additional arguments e.g. `-h {0} -p {1}` with query `r shortcut1 myremotecomp 22`, this will pass the arguments in as `-h myremotecomp -p 22`.
 
 **Installation**
+
 To use this plugin, from your Flow Launcher search `pm install runner`
 
 **Important:**
+
 The original Wox plugin saves its setting file (commands.json) in `%localappdata%\Wox.Plugin.Runner`, so to keep using the same commands you had, you need to move that file manually to the location above inside the `Wox.Plugin.Runner\Settings` folder after installing.
 
 Changes contained in this port:
