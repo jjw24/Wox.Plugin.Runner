@@ -1,0 +1,26 @@
+name: Build
+
+on:
+  workflow_dispatch:
+  push:
+    paths-ignore: 
+      - .github/workflows/*
+
+jobs:
+  build:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v1
+        with:
+          dotnet-version: 3.1.301
+      - name: Restore dependencies
+        run: dotnet restore
+      - name: Build
+        run: dotnet build ./Wox.Plugin.Runner/ --no-restore -c Release
+      - name: Upload Artifact
+        uses: actions/upload-artifact@v2
+        with:
+          name: WindowsWalker
+          path: ./Wox.Plugin.Runner/Output/Release/
