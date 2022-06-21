@@ -77,10 +77,10 @@
                 <Label  Grid.Row="6"  Content="Arguments:" HorizontalAlignment="Left" Margin="5,10,0,0" VerticalAlignment="Top"/>
                 <TextBox  Grid.Row="6"  Grid.Column="1" Height="23" Margin="5,10,10,0" Text="{Binding SelectedCommand.ArgumentsFormat, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Top"/>
                 <StackPanel Grid.Row="7" Grid.Column="1">
-                    <TextBlock FontSize="14" HorizontalAlignment="Left" Margin="5,10,0,0" VerticalAlignment="Top" TextWrapping="WrapWithOverflow">
+                    <TextBlock FontSize="12" HorizontalAlignment="Left" Margin="5,10,0,0" VerticalAlignment="Top" TextWrapping="WrapWithOverflow">
                         Add {*} flag to the end to allow infinite arguments to passed through the query window
                     </TextBlock>
-                    <TextBlock FontSize="14" HorizontalAlignment="Left" Margin="5,10,0,0" VerticalAlignment="Top" TextWrapping="WrapWithOverflow">
+                    <TextBlock FontSize="12" HorizontalAlignment="Left" Margin="5,10,0,0" VerticalAlignment="Top" TextWrapping="WrapWithOverflow">
                         Add {#} flags to set positional arguments to be filled by arguments passed through the query window
                     </TextBlock>
                     <TextBlock FontSize="12" HorizontalAlignment="Center" VerticalAlignment="Center" TextWrapping="WrapWithOverflow">
