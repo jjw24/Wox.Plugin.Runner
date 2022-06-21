@@ -20,7 +20,7 @@
     <Grid Margin="3">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
-            <RowDefinition />
+            <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
         <TextBlock Margin="0,0,0,8" TextWrapping="Wrap" Text="Click on a command to edit it. Click the Save Changes button when you are finished." />
         <Grid Grid.Row="1">
@@ -62,6 +62,7 @@
                     <RowDefinition/>
                     <RowDefinition/>
                     <RowDefinition/>
+                    <RowDefinition/>
                 </Grid.RowDefinitions>
                 <Label Grid.Row="0" Content="Description:" HorizontalAlignment="Left" Margin="5,10,0,0" VerticalAlignment="Top"/>
                 <TextBox  Grid.Row="0" Grid.Column="1" Height="23" Margin="5,3,10,0" Text="{Binding SelectedCommand.Description, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Top"/>
@@ -75,6 +76,23 @@
                 <Button  Grid.Row="5"  Grid.Column="1" HorizontalAlignment="Right" Content="Browse" Name="btnBrowseWorkDir" Margin="0,10,10,0" VerticalAlignment="Top" Click="btnBrowseWorkDir_Click" />
                 <Label  Grid.Row="6"  Content="Arguments:" HorizontalAlignment="Left" Margin="5,10,0,0" VerticalAlignment="Top"/>
                 <TextBox  Grid.Row="6"  Grid.Column="1" Height="23" Margin="5,10,10,0" Text="{Binding SelectedCommand.ArgumentsFormat, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Top"/>
+                <StackPanel Grid.Row="7" Grid.Column="1">
+                    <TextBlock FontSize="14" HorizontalAlignment="Left" Margin="5,10,0,0" VerticalAlignment="Top" TextWrapping="WrapWithOverflow">
+                        Add {*} flag to the end to allow infinite arguments to passed through the query window
+                    </TextBlock>
+                    <TextBlock FontSize="14" HorizontalAlignment="Left" Margin="5,10,0,0" VerticalAlignment="Top" TextWrapping="WrapWithOverflow">
+                        Add {#} flags to set positional arguments to be filled by arguments passed through the query window
+                    </TextBlock>
+                    <TextBlock FontSize="12" HorizontalAlignment="Center" VerticalAlignment="Center" TextWrapping="WrapWithOverflow">
+                        Arguments: -h {0} -p {1}
+                    </TextBlock>
+                    <TextBlock FontSize="12" HorizontalAlignment="Center" VerticalAlignment="Center" TextWrapping="WrapWithOverflow">
+                        Query: r shortcut argument1 22
+                    </TextBlock>
+                    <TextBlock FontSize="12" HorizontalAlignment="Center" VerticalAlignment="Center" TextWrapping="WrapWithOverflow">
+                        Final arguments: -h argument1 -p 22
+                    </TextBlock>
+                </StackPanel>
             </Grid>
             <Grid Grid.Row="1" Margin="10,10,0,0">
                 <Grid.ColumnDefinitions>
