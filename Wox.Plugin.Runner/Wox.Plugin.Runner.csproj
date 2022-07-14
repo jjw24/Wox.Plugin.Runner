@@ -1,15 +1,18 @@
-﻿<Project Sdk="Microsoft.NET.Sdk.WindowsDesktop">
+﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <TargetFramework>net5.0-windows</TargetFramework>
     <OutputType>Library</OutputType>
     <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\</SolutionDir>
     <RestorePackages>true</RestorePackages>
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+    <Nullable>enable</Nullable>
     <UseWindowsForms>true</UseWindowsForms>
     <UseWPF>true</UseWPF>
     <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
     <AppendRuntimeIdentifierToOutputPath>false</AppendRuntimeIdentifierToOutputPath>
     <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <AnalysisLevel>none</AnalysisLevel>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
     <OutputPath>..\Output\Release\Wox.Plugin.Runner</OutputPath>
@@ -18,7 +21,7 @@
     <OutputPath>..\Output\Debug\Wox.Plugin.Runner</OutputPath>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="Flow.Launcher.Plugin" Version="1.4.0" />
+    <PackageReference Include="Flow.Launcher.Plugin" Version="2.1.1" />
     <PackageReference Include="System.Data.DataSetExtensions" Version="4.5.0" />
   </ItemGroup>
   
@@ -35,8 +38,5 @@
     <Content Include="Images\globe.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-  </ItemGroup>
-  <ItemGroup>
-    <PackageReference Include="CommonServiceLocator" Version="1.3" />
   </ItemGroup>
 </Project>

@@ -63,6 +63,7 @@
                     <RowDefinition/>
                     <RowDefinition/>
                     <RowDefinition/>
+                    <RowDefinition/>
                 </Grid.RowDefinitions>
                 <Label Grid.Row="0" Content="Description:" HorizontalAlignment="Left" Margin="5,10,0,0" VerticalAlignment="Top"/>
                 <TextBox  Grid.Row="0" Grid.Column="1" Height="23" Margin="5,3,10,0" Text="{Binding SelectedCommand.Description, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Top"/>
@@ -74,9 +75,14 @@
                 <Label  Grid.Row="4"  Content="Working dir:" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top"/>
                 <TextBox  Grid.Row="4"  Grid.Column="1" Name="tbWorkDir" Height="23" Margin="5,10,10,0" Text="{Binding SelectedCommand.WorkingDirectory, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Top"/>
                 <Button  Grid.Row="5"  Grid.Column="1" HorizontalAlignment="Right" Content="Browse" Name="btnBrowseWorkDir" Margin="0,10,10,0" VerticalAlignment="Top" Click="btnBrowseWorkDir_Click" />
-                <Label  Grid.Row="6"  Content="Arguments:" HorizontalAlignment="Left" Margin="5,10,0,0" VerticalAlignment="Top"/>
-                <TextBox  Grid.Row="6"  Grid.Column="1" Height="23" Margin="5,10,10,0" Text="{Binding SelectedCommand.ArgumentsFormat, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Top"/>
-                <StackPanel Grid.Row="7" Grid.Column="1">
+                <StackPanel Grid.Row="6" Grid.Column="1">
+                    <TextBlock FontSize="12" HorizontalAlignment="Left" Margin="5,10,0,0" VerticalAlignment="Top" TextWrapping="WrapWithOverflow">
+                        Use {explorer} to use the currently open file explorer window's path
+                    </TextBlock>
+                </StackPanel>
+                <Label  Grid.Row="7"  Content="Arguments:" HorizontalAlignment="Left" Margin="5,10,0,0" VerticalAlignment="Top"/>
+                <TextBox  Grid.Row="7"  Grid.Column="1" Height="23" Margin="5,10,10,0" Text="{Binding SelectedCommand.ArgumentsFormat, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Top"/>
+                <StackPanel Grid.Row="8" Grid.Column="1">
                     <TextBlock FontSize="12" HorizontalAlignment="Left" Margin="5,10,0,0" VerticalAlignment="Top" TextWrapping="WrapWithOverflow">
                         Add {*} flag to the end to allow infinite arguments to passed through the query window
                     </TextBlock>
