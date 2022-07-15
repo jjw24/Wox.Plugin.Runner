@@ -8,7 +8,7 @@ namespace Wox.Plugin.Runner
 {
     static class RunnerConfiguration
     {
-        private static IConfigurationLoader loader;
+        private static IConfigurationLoader? loader;
         public static IConfigurationLoader Loader 
         { 
             get
@@ -21,7 +21,7 @@ namespace Wox.Plugin.Runner
             }
         }
 
-        private static IEnumerable<Command> commands;
+        private static IEnumerable<Command>? commands;
         public static IEnumerable<Command> Commands
         {
             get

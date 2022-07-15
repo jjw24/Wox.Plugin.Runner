@@ -6,7 +6,7 @@ namespace Wox.Plugin.Runner.Settings
 {
     public class RunnerSettingsViewModel
     {
-        private readonly PluginInitContext context;
+        private readonly PluginInitContext? context;
 
         public RunnerSettingsViewModel() { }
 
@@ -21,9 +21,9 @@ namespace Wox.Plugin.Runner.Settings
                 RunnerConfiguration.Commands.Select( c => new CommandViewModel( c ) ) );
         }
 
-        public ObservableCollection<CommandViewModel> Commands { get; set; }
+        public ObservableCollection<CommandViewModel>? Commands { get; set; }
 
-        public CommandViewModel SelectedCommand { get; set; }
+        public CommandViewModel? SelectedCommand { get; set; }
 
         public bool CommandIsSelected
         {
@@ -36,22 +36,22 @@ namespace Wox.Plugin.Runner.Settings
         public void Add()
         {
             var cmd = new CommandViewModel(new Command());
-            Commands.Add(cmd);
+            Commands!.Add(cmd);
             SelectedCommand = cmd;
         }
 
         public void SaveChanges()
         {
-            RunnerConfiguration.Commands = Commands.Select(c => c.GetCommand());
+            RunnerConfiguration.Commands = Commands!.Select(c => c.GetCommand());
 
-            context.API.ShowMsg("Your changes have been saved!");
+            context!.API.ShowMsg("Your changes have been saved!");
         }
 
         public void Delete(CommandViewModel cmdToDelete)
         {
             if (cmdToDelete != null)
             {
-                Commands.Remove(cmdToDelete);
+                Commands!.Remove(cmdToDelete);
                 SelectedCommand = null;
             }
         }

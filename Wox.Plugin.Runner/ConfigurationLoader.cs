@@ -16,7 +16,7 @@ namespace Wox.Plugin.Runner
     class ConfigurationLoader : IConfigurationLoader
     {
         readonly static string configPath = Environment.ExpandEnvironmentVariables(
-            @$"%appdata%\FlowLauncher\Settings\Plugins\{Runner.Context.CurrentPluginMetadata.Name}");
+            @$"%appdata%\FlowLauncher\Settings\Plugins\{Runner.Context!.CurrentPluginMetadata.Name}");
         readonly static string configFile = Path.Combine(configPath, "commands.json");
 
         public ConfigurationLoader()
@@ -33,7 +33,7 @@ namespace Wox.Plugin.Runner
         {
             var text = File.ReadAllText(configFile);
             if (!string.IsNullOrEmpty(text))
-                return JsonSerializer.Deserialize<IEnumerable<Command>>(text);
+                return JsonSerializer.Deserialize<IEnumerable<Command>>(text) ?? new List<Command>();
 
             return new List<Command>();
         }

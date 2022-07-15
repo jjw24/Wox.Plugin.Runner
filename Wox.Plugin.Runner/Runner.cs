@@ -12,8 +12,8 @@ namespace Wox.Plugin.Runner
 {
     public class Runner : IPlugin, ISettingProvider
     {
-        internal static PluginInitContext Context;
-        RunnerSettingsViewModel viewModel;
+        internal static PluginInitContext? Context;
+        RunnerSettingsViewModel? viewModel;
 
         public void Init(PluginInitContext context)
         {
@@ -82,7 +82,7 @@ namespace Wox.Plugin.Runner
         {
             return RunnerConfiguration.Commands.Select(c => new Result()
             {
-                Score = Context.API.FuzzySearch(shortcut, c.Shortcut).Score,
+                Score = Context!.API.FuzzySearch(shortcut, c.Shortcut).Score,
                 Title = c.Shortcut,
                 SubTitle = c.Description,
                 Action = e => RunCommand(e, c, terms),
@@ -93,7 +93,7 @@ namespace Wox.Plugin.Runner
 
         public Control CreateSettingPanel()
         {
-            return new RunnerSettings(viewModel);
+            return new RunnerSettings(viewModel!);
         }
 
         private bool RunCommand(ActionContext e, Command command, IEnumerable<string>? terms = null)
@@ -120,8 +120,8 @@ namespace Wox.Plugin.Runner
             }
             catch (FormatException ex)
             {
-                Context.API.ShowMsg("There was a problem. Please check the arguments format for the command.");
-                Context.API.LogException(nameof(Runner), "Argument format was invalid", ex);
+                Context!.API.ShowMsg("There was a problem. Please check the arguments format for the command.");
+                Context!.API.LogException(nameof(Runner), "Argument format was invalid", ex);
             }
             return true;
         }
@@ -173,9 +173,9 @@ namespace Wox.Plugin.Runner
 
         class ProcessArguments
         {
-            public string FileName { get; set; }
-            public string Arguments { get; set; }
-            public string WorkingDirectory { get; set; }
+            public string FileName { get; set; } = "";
+            public string Arguments { get; set; } = "";
+            public string? WorkingDirectory { get; set; }
         }
     }
 }
