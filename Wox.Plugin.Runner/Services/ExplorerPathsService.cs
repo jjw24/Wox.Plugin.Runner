@@ -38,6 +38,7 @@ namespace Wox.Plugin.Runner
                 }
 
                 int zIndex = fullResults.Count;
+                // EnumWindows iterates over windows in ZIndex order, basically the foremost window will be the first one
                 EnumWindows((IntPtr hwnd, IntPtr param) =>
                 {
                     var result = fullResults.Find(v => v.HWND == hwnd);
