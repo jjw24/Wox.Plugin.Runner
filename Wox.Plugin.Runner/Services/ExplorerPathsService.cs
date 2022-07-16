@@ -10,11 +10,10 @@ namespace Wox.Plugin.Runner
     {
         public static List<string> GetOpenExplorerPaths()
         {
-            var results = new List<string>();
             Type? type = Type.GetTypeFromProgID("Shell.Application");
-            if (type == null) return results;
+            if (type == null) return new List<string>();
             dynamic? shell = Activator.CreateInstance(type);
-            if (shell == null) return results;
+            if (shell == null) return new List<string>();
             try
             {
                 var fullResults = new List<ExplorerResult>();
@@ -25,6 +24,9 @@ namespace Wox.Plugin.Runner
                     var window = openWindows.Item(i);
                     if (window == null) continue;
                     var fileName = Path.GetFileName((string)window.FullName);
+
+                    // Other things which are returned include the internet explorer and the classic control panel
+                    // We only want file explorer windows
                     if (fileName.ToLower() == "explorer.exe")
                     {
                         string locationUrl = window.LocationURL;
@@ -48,16 +50,16 @@ namespace Wox.Plugin.Runner
                     return zIndex > 0;
                 }, IntPtr.Zero);
 
-                // sort descending
-                fullResults.Sort((a, b) => b.ZIndex - a.ZIndex);
-                results.AddRange(fullResults.Select(v => v.Path));
+                // sort descending and return the paths
+                return fullResults
+                    .OrderByDescending(v => v.ZIndex)
+                    .Select(v => v.Path)
+                    .ToList();
             }
             finally
             {
                 Marshal.FinalReleaseComObject(shell);
             }
-
-            return results;
         }
 
         private class ExplorerResult
