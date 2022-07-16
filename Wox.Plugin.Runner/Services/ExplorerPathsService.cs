@@ -11,53 +11,50 @@ namespace Wox.Plugin.Runner
         public static List<string> GetOpenExplorerPaths()
         {
             var results = new List<string>();
-            if (OperatingSystem.IsWindows())
+            Type? type = Type.GetTypeFromProgID("Shell.Application");
+            if (type == null) return results;
+            dynamic? shell = Activator.CreateInstance(type);
+            if (shell == null) return results;
+            try
             {
-                Type? type = Type.GetTypeFromProgID("Shell.Application");
-                if (type == null) return results;
-                dynamic? shell = Activator.CreateInstance(type);
-                if (shell == null) return results;
-                try
-                {
-                    var fullResults = new List<ExplorerResult>();
+                var fullResults = new List<ExplorerResult>();
 
-                    var openWindows = shell.Windows();
-                    for (int i = 0; i < openWindows.Count; i++)
+                var openWindows = shell.Windows();
+                for (int i = 0; i < openWindows.Count; i++)
+                {
+                    var window = openWindows.Item(i);
+                    if (window == null) continue;
+                    var fileName = Path.GetFileName((string)window.FullName);
+                    if (fileName.ToLower() == "explorer.exe")
                     {
-                        var window = openWindows.Item(i);
-                        if (window == null) continue;
-                        var fileName = Path.GetFileName((string)window.FullName);
-                        if (fileName.ToLower() == "explorer.exe")
+                        string locationUrl = window.LocationURL;
+                        if (!string.IsNullOrEmpty(locationUrl))
                         {
-                            string locationUrl = window.LocationURL;
-                            if (!string.IsNullOrEmpty(locationUrl))
-                            {
-                                fullResults.Add(new ExplorerResult(new IntPtr(window.HWND), new Uri(locationUrl).LocalPath));
-                            }
+                            fullResults.Add(new ExplorerResult(new IntPtr(window.HWND), new Uri(locationUrl).LocalPath));
                         }
                     }
-
-                    int zIndex = fullResults.Count;
-                    EnumWindows((IntPtr hwnd, IntPtr param) =>
-                    {
-                        var result = fullResults.Find(v => v.HWND == hwnd);
-                        if(result != null)
-                        {
-                            result.ZIndex = zIndex;
-                            zIndex -= 1;
-                        }
-                        // zIndex is also used as a counter: how many more windows do we have to find
-                        return zIndex > 0;
-                    }, IntPtr.Zero);
-
-                    // sort descending
-                    fullResults.Sort((a, b) => b.ZIndex - a.ZIndex);
-                    results.AddRange(fullResults.Select(v => v.Path));
                 }
-                finally
+
+                int zIndex = fullResults.Count;
+                EnumWindows((IntPtr hwnd, IntPtr param) =>
                 {
-                    Marshal.FinalReleaseComObject(shell);
-                }
+                    var result = fullResults.Find(v => v.HWND == hwnd);
+                    if(result != null)
+                    {
+                        result.ZIndex = zIndex;
+                        zIndex -= 1;
+                    }
+                    // zIndex is also used as a counter: how many more windows do we have to find
+                    return zIndex > 0;
+                }, IntPtr.Zero);
+
+                // sort descending
+                fullResults.Sort((a, b) => b.ZIndex - a.ZIndex);
+                results.AddRange(fullResults.Select(v => v.Path));
+            }
+            finally
+            {
+                Marshal.FinalReleaseComObject(shell);
             }
 
             return results;

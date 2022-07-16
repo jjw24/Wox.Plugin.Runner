@@ -12,7 +12,7 @@ namespace Wox.Plugin.Runner
 {
     public class Runner : IPlugin, ISettingProvider
     {
-        internal static PluginInitContext? Context;
+        internal static PluginInitContext Context = null!;
         RunnerSettingsViewModel? viewModel;
 
         public void Init(PluginInitContext context)
@@ -82,7 +82,7 @@ namespace Wox.Plugin.Runner
         {
             return RunnerConfiguration.Commands.Select(c => new Result()
             {
-                Score = Context!.API.FuzzySearch(shortcut, c.Shortcut).Score,
+                Score = Context.API.FuzzySearch(shortcut, c.Shortcut).Score,
                 Title = c.Shortcut,
                 SubTitle = c.Description,
                 Action = e => RunCommand(e, c, terms),
@@ -120,8 +120,8 @@ namespace Wox.Plugin.Runner
             }
             catch (FormatException ex)
             {
-                Context!.API.ShowMsg("There was a problem. Please check the arguments format for the command.");
-                Context!.API.LogException(nameof(Runner), "Argument format was invalid", ex);
+                Context.API.ShowMsg("There was a problem. Please check the arguments format for the command.");
+                Context.API.LogException(nameof(Runner), "Argument format was invalid", ex);
             }
             return true;
         }
