@@ -21,7 +21,7 @@ The original Wox plugin saves its setting file (commands.json) in `%localappdata
 
 Changes contained in this port:
 
-- Upgraded to .Net Core 3.1
+- Upgraded to .Net 5
 - Changed Wox's plugin library to Flow's plugin library
 - Removed MvvmLightLibs library
 - Changed the location of the setting file commands.json
