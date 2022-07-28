@@ -33,7 +33,7 @@ namespace Wox.Plugin.Runner
         {
             var text = File.ReadAllText(configFile);
             if (!string.IsNullOrEmpty(text))
-                return JsonSerializer.Deserialize<IEnumerable<Command>>(text);
+                return JsonSerializer.Deserialize<IEnumerable<Command>>(text) ?? new List<Command>();
 
             return new List<Command>();
         }

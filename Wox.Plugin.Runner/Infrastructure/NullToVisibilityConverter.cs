@@ -9,12 +9,9 @@ namespace Wox.Plugin.Runner.Infrastructure
 {
     class NullToVisibilityConverter : IValueConverter
     {
-        public object Convert( object value, Type targetType, object parameter, System.Globalization.CultureInfo culture )
+        public object Convert( object? value, Type targetType, object parameter, System.Globalization.CultureInfo culture )
         {
-            if ( value == null )
-                return Visibility.Hidden;
-            else
-                return Visibility.Visible;
+            return value == null ? Visibility.Hidden : Visibility.Visible;
         }
 
         public object ConvertBack( object value, Type targetType, object parameter, System.Globalization.CultureInfo culture )

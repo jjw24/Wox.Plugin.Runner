@@ -12,8 +12,8 @@ namespace Wox.Plugin.Runner
 {
     public class Runner : IPlugin, ISettingProvider
     {
-        internal static PluginInitContext Context;
-        RunnerSettingsViewModel viewModel;
+        internal static PluginInitContext Context = null!;
+        RunnerSettingsViewModel? viewModel;
 
         public void Init(PluginInitContext context)
         {
@@ -93,16 +93,18 @@ namespace Wox.Plugin.Runner
 
         public Control CreateSettingPanel()
         {
-            return new RunnerSettings(viewModel);
+            return new RunnerSettings(viewModel!);
         }
 
-        private bool RunCommand(ActionContext e, Command command, IEnumerable<string> terms = null)
+        private bool RunCommand(ActionContext e, Command command, IEnumerable<string>? terms = null)
         {
             try
             {
                 var args = GetProcessArguments(command, terms);
-                var startInfo = new ProcessStartInfo(args.FileName, args.Arguments);
-                startInfo.UseShellExecute = true;
+                var startInfo = new ProcessStartInfo(args.FileName, args.Arguments)
+                {
+                    UseShellExecute = true
+                };
                 if (args.WorkingDirectory != null)
                 {
                     startInfo.WorkingDirectory = args.WorkingDirectory;
@@ -116,14 +118,15 @@ namespace Wox.Plugin.Runner
                 if (w32Ex.Message != "The operation was canceled by the user")
                     throw;
             }
-            catch (FormatException)
+            catch (FormatException ex)
             {
                 Context.API.ShowMsg("There was a problem. Please check the arguments format for the command.");
+                Context.API.LogException(nameof(Runner), "Argument format was invalid", ex);
             }
             return true;
         }
 
-        private ProcessArguments GetProcessArguments(Command c, IEnumerable<string> terms)
+        private ProcessArguments GetProcessArguments(Command c, IEnumerable<string>? terms)
         {
             var argString = string.Empty;
 
@@ -135,7 +138,7 @@ namespace Wox.Plugin.Runner
                     // remove '{*}' flag from arguments
                     argString = c.ArgumentsFormat.Remove(c.ArgumentsFormat.Length - 3, 3);
                     // add user specified arguments to the arguments to be passed
-                    argString = argString + string.Join(" ", terms);
+                    argString += terms != null ? string.Join(" ", terms) : "";
                 }
                 // command's arguments HAS flag/s, thus user is able to manually pass in arguments e.g. settings: {0} {1}
                 // or command's arguments HAS set normal text arguments e.g. settings: -h myremotecomp -p 22
@@ -148,11 +151,18 @@ namespace Wox.Plugin.Runner
             }
 
             var workingDir = c.WorkingDirectory;
+            if (workingDir == "{explorer}")
+            {
+                var openExplorerPaths = ExplorerPathsService.GetOpenExplorerPaths();
+                workingDir = openExplorerPaths.FirstOrDefault();
+            }
+
             if (string.IsNullOrEmpty(workingDir))
             {
                 // Use directory where executable is based.
                 workingDir = Path.GetDirectoryName(c.Path);
-            }
+            } 
+
             return new ProcessArguments
             {
                 FileName = c.Path,
@@ -163,9 +173,9 @@ namespace Wox.Plugin.Runner
 
         class ProcessArguments
         {
-            public string FileName { get; set; }
-            public string Arguments { get; set; }
-            public string WorkingDirectory { get; set; }
+            public string FileName { get; set; } = "";
+            public string Arguments { get; set; } = "";
+            public string? WorkingDirectory { get; set; }
         }
     }
 }

@@ -1,20 +1,22 @@
-﻿<UserControl x:Class="Wox.Plugin.Runner.Settings.RunnerSettings"
-             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-             xmlns:s="clr-namespace:Wox.Plugin.Runner.Settings"
-             xmlns:infra="clr-namespace:Wox.Plugin.Runner.Infrastructure"
-             mc:Ignorable="d"
-             d:DesignHeight="300" d:DesignWidth="300">
+﻿<UserControl
+    x:Class="Wox.Plugin.Runner.Settings.RunnerSettings"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:infra="clr-namespace:Wox.Plugin.Runner.Infrastructure"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:s="clr-namespace:Wox.Plugin.Runner.Settings"
+    d:DesignHeight="300"
+    d:DesignWidth="300"
+    mc:Ignorable="d">
     <UserControl.DataContext>
         <s:RunnerSettingsViewModel />
     </UserControl.DataContext>
     <UserControl.Resources>
         <infra:NullToVisibilityConverter x:Key="nullToVisibilityConverter" />
         <Style x:Key="hcs" TargetType="{x:Type GridViewColumnHeader}">
-            <Setter Property="HorizontalContentAlignment" Value="Left"></Setter>
-            <Setter Property="Margin" Value="4,0,0,0"></Setter>
+            <Setter Property="HorizontalContentAlignment" Value="Left" />
+            <Setter Property="Margin" Value="4,0,0,0" />
         </Style>
     </UserControl.Resources>
     <Grid Margin="3">
@@ -22,22 +24,27 @@
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
-        <TextBlock Margin="0,0,0,8" TextWrapping="Wrap" Text="Click on a command to edit it. Click the Save Changes button when you are finished." />
+        <TextBlock
+            Margin="0,0,0,8"
+            Text="Click on a command to edit it. Click the Save Changes button when you are finished."
+            TextWrapping="Wrap" />
         <Grid Grid.Row="1">
             <Grid.RowDefinitions>
                 <RowDefinition />
-                <RowDefinition Height="50" />
             </Grid.RowDefinitions>
             <Grid.ColumnDefinitions>
-                <ColumnDefinition/>
-                <ColumnDefinition/>
+                <ColumnDefinition />
+                <ColumnDefinition />
             </Grid.ColumnDefinitions>
-            <ListBox Grid.Column="0" Name="lbxCommands" SelectedItem="{Binding SelectedCommand}">
+            <ListBox
+                Name="lbxCommands"
+                Grid.Column="0"
+                SelectedItem="{Binding SelectedCommand}">
                 <ListBox.ItemTemplate>
                     <DataTemplate>
                         <StackPanel Margin="3">
-                            <TextBlock Text="{Binding Description}" FontSize="14" />
-                            <TextBlock>
+                            <TextBlock FontSize="14" Text="{Binding Description}" />
+                            <TextBlock ToolTipService.ToolTip="{Binding RelativeSource={RelativeSource Self}, Path=Text}">
                                 <TextBlock.Text>
                                     <MultiBinding StringFormat="{}{0} - {1}">
                                         <Binding Path="Shortcut" />
@@ -49,60 +56,183 @@
                     </DataTemplate>
                 </ListBox.ItemTemplate>
             </ListBox>
-            <Grid Grid.Column="1" Grid.ColumnSpan="2" Visibility="{Binding SelectedCommand, Converter={StaticResource nullToVisibilityConverter}}">
+            <Grid
+                Grid.Column="1"
+                Grid.ColumnSpan="2"
+                Visibility="{Binding SelectedCommand, Converter={StaticResource nullToVisibilityConverter}}">
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="4*"/>
-                    <ColumnDefinition Width="6*"/>
+                    <ColumnDefinition Width="4*" />
+                    <ColumnDefinition Width="6*" />
                 </Grid.ColumnDefinitions>
                 <Grid.RowDefinitions>
-                    <RowDefinition/>
-                    <RowDefinition/>
-                    <RowDefinition/>
-                    <RowDefinition/>
-                    <RowDefinition/>
-                    <RowDefinition/>
-                    <RowDefinition/>
-                    <RowDefinition/>
+                    <RowDefinition />
+                    <RowDefinition />
+                    <RowDefinition />
+                    <RowDefinition />
+                    <RowDefinition />
+                    <RowDefinition />
+                    <RowDefinition />
+                    <RowDefinition />
+                    <RowDefinition />
                 </Grid.RowDefinitions>
-                <Label Grid.Row="0" Content="Description:" HorizontalAlignment="Left" Margin="5,10,0,0" VerticalAlignment="Top"/>
-                <TextBox  Grid.Row="0" Grid.Column="1" Height="23" Margin="5,3,10,0" Text="{Binding SelectedCommand.Description, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Top"/>
-                <Label  Grid.Row="1"  Content="Shortcut:" HorizontalAlignment="Left" Margin="5,10,0,0" VerticalAlignment="Top"/>
-                <TextBox  Grid.Row="1"  Grid.Column="1" Height="23" Margin="5,10,10,0" Text="{Binding SelectedCommand.Shortcut, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Top"/>
-                <Label  Grid.Row="2"  Content="Path:" HorizontalAlignment="Left" Margin="5,10,0,0" VerticalAlignment="Top"/>
-                <TextBox  Grid.Row="2"  Grid.Column="1" Name="tbPath" Height="23" Margin="5,10,10,0" Text="{Binding SelectedCommand.Path, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Top"/>
-                <Button  Grid.Row="3"  Grid.Column="1"  HorizontalAlignment="Right" Content="Browse" Name="btnBrowsePath" Margin="0,10,10,0" VerticalAlignment="Top" Click="btnBrowsePath_Click" />
-                <Label  Grid.Row="4"  Content="Working dir:" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top"/>
-                <TextBox  Grid.Row="4"  Grid.Column="1" Name="tbWorkDir" Height="23" Margin="5,10,10,0" Text="{Binding SelectedCommand.WorkingDirectory, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Top"/>
-                <Button  Grid.Row="5"  Grid.Column="1" HorizontalAlignment="Right" Content="Browse" Name="btnBrowseWorkDir" Margin="0,10,10,0" VerticalAlignment="Top" Click="btnBrowseWorkDir_Click" />
-                <Label  Grid.Row="6"  Content="Arguments:" HorizontalAlignment="Left" Margin="5,10,0,0" VerticalAlignment="Top"/>
-                <TextBox  Grid.Row="6"  Grid.Column="1" Height="23" Margin="5,10,10,0" Text="{Binding SelectedCommand.ArgumentsFormat, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Top"/>
-                <StackPanel Grid.Row="7" Grid.Column="1">
-                    <TextBlock FontSize="12" HorizontalAlignment="Left" Margin="5,10,0,0" VerticalAlignment="Top" TextWrapping="WrapWithOverflow">
+                <Label
+                    Grid.Row="0"
+                    Margin="5,10,0,0"
+                    HorizontalAlignment="Left"
+                    VerticalAlignment="Top"
+                    Content="Description:" />
+                <TextBox
+                    Grid.Row="0"
+                    Grid.Column="1"
+                    Height="23"
+                    Margin="5,3,10,0"
+                    VerticalAlignment="Top"
+                    Text="{Binding SelectedCommand.Description, UpdateSourceTrigger=PropertyChanged}" />
+                <Label
+                    Grid.Row="1"
+                    Margin="5,10,0,0"
+                    HorizontalAlignment="Left"
+                    VerticalAlignment="Top"
+                    Content="Shortcut:" />
+                <TextBox
+                    Grid.Row="1"
+                    Grid.Column="1"
+                    Height="23"
+                    Margin="5,10,10,0"
+                    VerticalAlignment="Top"
+                    Text="{Binding SelectedCommand.Shortcut, UpdateSourceTrigger=PropertyChanged}" />
+                <Label
+                    Grid.Row="2"
+                    Margin="5,10,0,0"
+                    HorizontalAlignment="Left"
+                    VerticalAlignment="Top"
+                    Content="Path:" />
+                <TextBox
+                    Name="tbPath"
+                    Grid.Row="2"
+                    Grid.Column="1"
+                    Height="23"
+                    Margin="5,10,10,0"
+                    VerticalAlignment="Top"
+                    Text="{Binding SelectedCommand.Path, UpdateSourceTrigger=PropertyChanged}" />
+                <Button
+                    Name="btnBrowsePath"
+                    Grid.Row="3"
+                    Grid.Column="1"
+                    Margin="0,10,10,0"
+                    HorizontalAlignment="Right"
+                    VerticalAlignment="Top"
+                    Click="btnBrowsePath_Click"
+                    Content="Browse" />
+                <Label
+                    Grid.Row="4"
+                    Margin="10,10,0,0"
+                    HorizontalAlignment="Left"
+                    VerticalAlignment="Top"
+                    Content="Working dir:" />
+                <TextBox
+                    Name="tbWorkDir"
+                    Grid.Row="4"
+                    Grid.Column="1"
+                    Height="23"
+                    Margin="5,10,10,0"
+                    VerticalAlignment="Top"
+                    Text="{Binding SelectedCommand.WorkingDirectory, UpdateSourceTrigger=PropertyChanged}" />
+                <Button
+                    Name="btnBrowseWorkDir"
+                    Grid.Row="5"
+                    Grid.Column="1"
+                    Margin="0,10,10,0"
+                    HorizontalAlignment="Right"
+                    VerticalAlignment="Top"
+                    Click="btnBrowseWorkDir_Click"
+                    Content="Browse" />
+                <StackPanel Grid.Row="6" Grid.Column="1">
+                    <TextBlock
+                        Margin="5,10,0,0"
+                        HorizontalAlignment="Left"
+                        VerticalAlignment="Top"
+                        FontSize="12"
+                        TextWrapping="WrapWithOverflow">
+                        Use {explorer} to use the currently open file explorer window's path
+                    </TextBlock>
+                </StackPanel>
+                <Label
+                    Grid.Row="7"
+                    Margin="5,10,0,0"
+                    HorizontalAlignment="Left"
+                    VerticalAlignment="Top"
+                    Content="Arguments:" />
+                <TextBox
+                    Grid.Row="7"
+                    Grid.Column="1"
+                    Height="23"
+                    Margin="5,10,10,0"
+                    VerticalAlignment="Top"
+                    Text="{Binding SelectedCommand.ArgumentsFormat, UpdateSourceTrigger=PropertyChanged}" />
+                <StackPanel Grid.Row="8" Grid.Column="1">
+                    <TextBlock
+                        Margin="5,10,0,0"
+                        HorizontalAlignment="Left"
+                        VerticalAlignment="Top"
+                        FontSize="12"
+                        TextWrapping="WrapWithOverflow">
                         Add {*} flag to the end to allow infinite arguments to passed through the query window
                     </TextBlock>
-                    <TextBlock FontSize="12" HorizontalAlignment="Left" Margin="5,10,0,0" VerticalAlignment="Top" TextWrapping="WrapWithOverflow">
+                    <TextBlock
+                        Margin="5,10,0,0"
+                        HorizontalAlignment="Left"
+                        VerticalAlignment="Top"
+                        FontSize="12"
+                        TextWrapping="WrapWithOverflow">
                         Add {#} flags to set positional arguments to be filled by arguments passed through the query window
                     </TextBlock>
-                    <TextBlock FontSize="12" HorizontalAlignment="Center" VerticalAlignment="Center" TextWrapping="WrapWithOverflow">
+                    <TextBlock
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Center"
+                        FontSize="12"
+                        TextWrapping="WrapWithOverflow">
                         Arguments: -h {0} -p {1}
                     </TextBlock>
-                    <TextBlock FontSize="12" HorizontalAlignment="Center" VerticalAlignment="Center" TextWrapping="WrapWithOverflow">
+                    <TextBlock
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Center"
+                        FontSize="12"
+                        TextWrapping="WrapWithOverflow">
                         Query: r shortcut argument1 22
                     </TextBlock>
-                    <TextBlock FontSize="12" HorizontalAlignment="Center" VerticalAlignment="Center" TextWrapping="WrapWithOverflow">
+                    <TextBlock
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Center"
+                        FontSize="12"
+                        TextWrapping="WrapWithOverflow">
                         Final arguments: -h argument1 -p 22
                     </TextBlock>
                 </StackPanel>
             </Grid>
-            <Grid Grid.Row="1" Margin="10,10,0,0">
+            <Grid Margin="10,10,0,0" VerticalAlignment="Bottom">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition />
                     <ColumnDefinition />
                     <ColumnDefinition />
                 </Grid.ColumnDefinitions>
-                <Button Width ="80" Margin="0,5,5,5" Content="Add" Click="btnAdd_Click" />
-                <Button Width ="80" Grid.Column="1" Margin="5" Content="Delete" Click="bntDelete" />
-                <Button Width ="80" Grid.Column="2" Margin="5,5,0,5" Content="Save" Click="btnSaveChanges_Click" />
+                <Button
+                    Width="80"
+                    Margin="0,5,5,5"
+                    Click="btnAdd_Click"
+                    Content="Add" />
+                <Button
+                    Grid.Column="1"
+                    Width="80"
+                    Margin="5"
+                    Click="bntDelete"
+                    Content="Delete" />
+                <Button
+                    Grid.Column="2"
+                    Width="80"
+                    Margin="5,5,0,5"
+                    Click="btnSaveChanges_Click"
+                    Content="Save" />
             </Grid>
         </Grid>
     </Grid>

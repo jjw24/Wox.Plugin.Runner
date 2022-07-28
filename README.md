@@ -5,9 +5,11 @@ This port is intended to be used for [Flow Launcher](https://github.com/Flow-Lau
 
 **New with this port:** 
 
-Use {*} flag in your setting argument to allow infinite arguments passed through the query window. For this to work the setting argument needs to end with `{*}`
+- Use {*} flag in your setting argument to allow infinite arguments passed through the query window. For this to work the setting argument needs to end with `{*}`
 
-Use {0} in your setting argument to pass just one argument. For this to work the setting argument needs to end with `{0}`, e.g. `-p {0}`. You can also specify multiple additional arguments e.g. `-h {0} -p {1}` with query `r shortcut1 myremotecomp 22`, this will pass the arguments in as `-h myremotecomp -p 22`.
+- Use {0} in your setting argument to pass just one argument. For this to work the setting argument needs to end with `{0}`, e.g. `-p {0}`. You can also specify multiple additional arguments e.g. `-h {0} -p {1}` with query `r shortcut1 myremotecomp 22`, this will pass the arguments in as `-h myremotecomp -p 22`.
+
+- Use the currently open file explorer window as the working directory for various commands. For example `code .` would open current folder in VSCode
 
 **Installation**
 
