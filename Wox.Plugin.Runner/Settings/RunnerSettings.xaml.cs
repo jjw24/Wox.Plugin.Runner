@@ -48,7 +48,7 @@ namespace Wox.Plugin.Runner.Settings
 
         private void btnSaveChanges_Click(object sender, RoutedEventArgs e)
         {
-            if (viewModel.Commands.Any(c => string.IsNullOrEmpty(c.Shortcut) || string.IsNullOrEmpty(c.Path)))
+            if (viewModel.Commands != null && viewModel.Commands.Any(c => string.IsNullOrEmpty(c.Shortcut) || string.IsNullOrEmpty(c.Path)))
             {
                 MessageBox.Show("One or more commands is missing a Shortcut or Path. Set a Shortcut and Path and try again.", "", 
                             MessageBoxButtons.OK, MessageBoxIcon.Warning);
