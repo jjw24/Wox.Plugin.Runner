@@ -56,10 +56,14 @@ namespace Wox.Plugin.Runner
                 var terms = splittedSearch[1..];
 
                 // exact match found and shows to the user command is being run with arguments
+                // score gets a boost if the terms length is equal to the terms count in the command
+                // otherwise sorted from least number of valid terms upwards (so if you have a command with the same
+                // shortcut with 1,2,3,* terms and the user types 2 terms, "1" will be deprioritized, and 2,3,* will
+                // be sorted in that order.
                 results = RunnerConfiguration.Commands.Where(c => c.Shortcut == shortcut)
                     .Select(c => new Result()
                     {
-                        Score = 50,
+                        Score = 50 + (terms.Length <= c.TermsCount ? -c.TermsCount : c.TermsCount),
                         Title = "Run " + (c.Description ?? $"shortcut {c.Shortcut}") +
                                 (terms.Count() > 0 ? $" with arguments: {string.Join(" ", terms)}" : string.Empty),
                         SubTitle = c.Description,
@@ -133,12 +137,10 @@ namespace Wox.Plugin.Runner
             if (!string.IsNullOrEmpty(c.ArgumentsFormat))
             {
                 // command's arguments HAS an infinite flag, thus user is able to manually pass infinite amount of arguments
-                if (c.ArgumentsFormat.EndsWith("{*}"))
+                if (c.ArgumentsFormat.Contains("{*}"))
                 {   
-                    // remove '{*}' flag from arguments
-                    argString = c.ArgumentsFormat.Remove(c.ArgumentsFormat.Length - 3, 3);
                     // add user specified arguments to the arguments to be passed
-                    argString += terms != null ? string.Join(" ", terms) : "";
+                    argString = c.ArgumentsFormat.Replace("{*}", terms != null ? string.Join(" ", terms) : "");
                 }
                 // command's arguments HAS flag/s, thus user is able to manually pass in arguments e.g. settings: {0} {1}
                 // or command's arguments HAS set normal text arguments e.g. settings: -h myremotecomp -p 22
