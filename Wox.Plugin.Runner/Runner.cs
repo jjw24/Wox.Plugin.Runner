@@ -56,10 +56,16 @@ namespace Wox.Plugin.Runner
                 var terms = splittedSearch[1..];
 
                 // exact match found and shows to the user command is being run with arguments
+                // score gets a boost based on how close the number of terms match. For example, if you have 3
+                // identical keywords, each with a different number of parameters then they will be sorted based on
+                // closeness to the number of parameters the user has typed.
+                //
+                // for example if the user types `pt hello there`, then a {0} and {1} version will have the lowest ranking
+                // while the version with {2} will have the highest, followed by {3}, {4}...{*}.
                 results = RunnerConfiguration.Commands.Where(c => c.Shortcut == shortcut)
                     .Select(c => new Result()
                     {
-                        Score = 50,
+                        Score = 50 + (terms.Length <= c.TermsCount ? terms.Length - c.TermsCount : -50),
                         Title = "Run " + (c.Description ?? $"shortcut {c.Shortcut}") +
                                 (terms.Count() > 0 ? $" with arguments: {string.Join(" ", terms)}" : string.Empty),
                         SubTitle = c.Description,
@@ -133,12 +139,10 @@ namespace Wox.Plugin.Runner
             if (!string.IsNullOrEmpty(c.ArgumentsFormat))
             {
                 // command's arguments HAS an infinite flag, thus user is able to manually pass infinite amount of arguments
-                if (c.ArgumentsFormat.EndsWith("{*}"))
+                if (c.ArgumentsFormat.Contains("{*}"))
                 {   
-                    // remove '{*}' flag from arguments
-                    argString = c.ArgumentsFormat.Remove(c.ArgumentsFormat.Length - 3, 3);
                     // add user specified arguments to the arguments to be passed
-                    argString += terms != null ? string.Join(" ", terms) : "";
+                    argString = c.ArgumentsFormat.Replace("{*}", terms != null ? string.Join(" ", terms) : "");
                 }
                 // command's arguments HAS flag/s, thus user is able to manually pass in arguments e.g. settings: {0} {1}
                 // or command's arguments HAS set normal text arguments e.g. settings: -h myremotecomp -p 22
