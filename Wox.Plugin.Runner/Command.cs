@@ -21,7 +21,7 @@ namespace Wox.Plugin.Runner
             {
                 if (ArgumentsFormat == null) return 0;
 
-                // this is the "unlimited" terms symbol
+                // arbitrarily high count for correctish ordering
                 if (UnlimitedTerms)
                 {
                   return 20;
