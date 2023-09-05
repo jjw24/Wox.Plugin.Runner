@@ -56,14 +56,16 @@ namespace Wox.Plugin.Runner
                 var terms = splittedSearch[1..];
 
                 // exact match found and shows to the user command is being run with arguments
-                // score gets a boost if the terms length is equal to the terms count in the command
-                // otherwise sorted from least number of valid terms upwards (so if you have a command with the same
-                // shortcut with 1,2,3,* terms and the user types 2 terms, "1" will be deprioritized, and 2,3,* will
-                // be sorted in that order.
+                // score gets a boost based on how close the number of terms match. For example, if you have 3
+                // identical keywords, each with a different number of parameters then they will be sorted based on
+                // closeness to the number of parameters the user has typed.
+                //
+                // for example if the user types `pt hello there`, then a {0} and {1} version will have the lowest ranking
+                // while the version with {2} will have the highest, followed by {3}, {4}...{*}.
                 results = RunnerConfiguration.Commands.Where(c => c.Shortcut == shortcut)
                     .Select(c => new Result()
                     {
-                        Score = 50 + (terms.Length <= c.TermsCount ? -c.TermsCount : c.TermsCount),
+                        Score = 50 + (terms.Length <= c.TermsCount ? terms.Length - c.TermsCount : -50),
                         Title = "Run " + (c.Description ?? $"shortcut {c.Shortcut}") +
                                 (terms.Count() > 0 ? $" with arguments: {string.Join(" ", terms)}" : string.Empty),
                         SubTitle = c.Description,

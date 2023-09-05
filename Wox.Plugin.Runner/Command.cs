@@ -10,6 +10,11 @@ namespace Wox.Plugin.Runner
         public string WorkingDirectory { get; set; } = "";
         public string ArgumentsFormat { get; set; } = "";
 
+        public bool UnlimitedTerms
+        {
+          get { return ArgumentsFormat != null && ArgumentsFormat.Contains("{*}"); }
+        }
+
         public int TermsCount
         {
             get
@@ -17,9 +22,9 @@ namespace Wox.Plugin.Runner
                 if (ArgumentsFormat == null) return 0;
 
                 // this is the "unlimited" terms symbol
-                if (ArgumentsFormat.Contains("{*}"))
+                if (UnlimitedTerms)
                 {
-                  return 50;
+                  return 20;
                 }
 
                 // return the number of {} terms
