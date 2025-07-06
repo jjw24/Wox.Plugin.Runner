@@ -1,4 +1,5 @@
-﻿using System.Text.RegularExpressions;
+﻿using System.Collections.ObjectModel;
+using System.Text.RegularExpressions;
 
 namespace Wox.Plugin.Runner
 {
@@ -31,5 +32,9 @@ namespace Wox.Plugin.Runner
                 return Regex.Matches(ArgumentsFormat, "{.*?}").Count;
             }
         }
+    }
+  public class Settings
+    {
+        public ObservableCollection<Command> Commands { get; set; } = new();
     }
 }

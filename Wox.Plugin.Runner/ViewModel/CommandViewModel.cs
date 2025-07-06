@@ -1,5 +1,5 @@
 ﻿
-namespace Wox.Plugin.Runner.Settings
+namespace Wox.Plugin.Runner.ViewModel
 {
     public class CommandViewModel
     {

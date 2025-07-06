@@ -6,7 +6,7 @@ using System.Windows.Forms;
 using MessageBox = System.Windows.Forms.MessageBox;
 using OpenFileDialog = Microsoft.Win32.OpenFileDialog;
 
-namespace Wox.Plugin.Runner.Settings
+namespace Wox.Plugin.Runner.ViewModel
 {
     /// <summary>
     /// Interaction logic for RunnerSettings.xaml

@@ -4,25 +4,25 @@ on:
   workflow_dispatch:
   push:
     branches: [ master ]
-    paths-ignore: 
+    paths-ignore:
       - .github/workflows/*
 
 jobs:
   publish:
     runs-on: windows-latest
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - name: Setup .NET
-        uses: actions/setup-dotnet@v2
+        uses: actions/setup-dotnet@v4
         with:
-          dotnet-version: 5.0.x
+          dotnet-version: 7.0.x
       - name: get version
         id: version
         uses: notiz-dev/github-action-json-property@release
-        with: 
+        with:
           path: 'Wox.Plugin.Runner/plugin.json'
           prop_path: 'Version'
-      - run: echo ${{steps.version.outputs.prop}} 
+      - run: echo ${{steps.version.outputs.prop}}
       - name: Build
         run: |
           dotnet publish 'Wox.Plugin.Runner/Wox.Plugin.Runner.csproj' -r win-x64 -c Release -o "Runner"

@@ -6,7 +6,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Windows.Controls;
-using Wox.Plugin.Runner.Settings;
+using Wox.Plugin.Runner.ViewModel;
 
 namespace Wox.Plugin.Runner
 {
@@ -14,11 +14,16 @@ namespace Wox.Plugin.Runner
     {
         internal static PluginInitContext Context = null!;
         RunnerSettingsViewModel? viewModel;
+        internal static Settings _settings;
 
         public void Init(PluginInitContext context)
         {
             Context = context;
+            _settings = context.API.LoadSettingJsonStorage<Settings>();
             viewModel = new RunnerSettingsViewModel(Context);
+
+            // Backwards compatibility code, remove after release 2.4.0
+            ConfigurationLoader.LoadCommandsFileToSettings(_settings);
         }
 
         public List<Result> Query(Query query)
@@ -31,7 +36,7 @@ namespace Wox.Plugin.Runner
             // shows all possible plugin commands
             if (string.IsNullOrEmpty(search))
             {
-                results = RunnerConfiguration.Commands
+                results = _settings.Commands
                     .Select(c =>
                         new Result()
                         {
@@ -62,7 +67,7 @@ namespace Wox.Plugin.Runner
                 //
                 // for example if the user types `pt hello there`, then a {0} and {1} version will have the lowest ranking
                 // while the version with {2} will have the highest, followed by {3}, {4}...{*}.
-                results = RunnerConfiguration.Commands.Where(c => c.Shortcut == shortcut)
+                results = _settings.Commands.Where(c => c.Shortcut == shortcut)
                     .Select(c => new Result()
                     {
                         Score = 50 + (terms.Length <= c.TermsCount ? terms.Length - c.TermsCount : -50),
@@ -86,7 +91,7 @@ namespace Wox.Plugin.Runner
 
         private List<Result> FuzzySearchCommand(string shortcut, string[] terms)
         {
-            return RunnerConfiguration.Commands.Select(c => new Result()
+            return _settings.Commands.Select(c => new Result()
             {
                 Score = Context.API.FuzzySearch(shortcut, c.Shortcut).Score,
                 Title = c.Shortcut,
@@ -140,7 +145,7 @@ namespace Wox.Plugin.Runner
             {
                 // command's arguments HAS an infinite flag, thus user is able to manually pass infinite amount of arguments
                 if (c.ArgumentsFormat.Contains("{*}"))
-                {   
+                {
                     // add user specified arguments to the arguments to be passed
                     argString = c.ArgumentsFormat.Replace("{*}", terms != null ? string.Join(" ", terms) : "");
                 }
@@ -148,8 +153,8 @@ namespace Wox.Plugin.Runner
                 // or command's arguments HAS set normal text arguments e.g. settings: -h myremotecomp -p 22
                 else
                 {
-                    argString = terms != null 
-                                    ? string.Format(c.ArgumentsFormat, terms.ToArray()) 
+                    argString = terms != null
+                                    ? string.Format(c.ArgumentsFormat, terms.ToArray())
                                     : c.ArgumentsFormat;
                 }
             }
@@ -165,7 +170,7 @@ namespace Wox.Plugin.Runner
             {
                 // Use directory where executable is based.
                 workingDir = Path.GetDirectoryName(c.Path);
-            } 
+            }
 
             return new ProcessArguments
             {
