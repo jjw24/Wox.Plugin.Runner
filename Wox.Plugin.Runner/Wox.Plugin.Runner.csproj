@@ -16,7 +16,7 @@
     <OutputPath>..\Output\Release\Wox.Plugin.Runner</OutputPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
-    <OutputPath>C:\Workbench\Git\Flow.Launcher\Output\Debug\Plugins\Wox.Plugin.Runner</OutputPath>
+    <OutputPath>..\Output\Debug\Wox.Plugin.Runner</OutputPath>
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="Flow.Launcher.Plugin" Version="4.6.0" />
