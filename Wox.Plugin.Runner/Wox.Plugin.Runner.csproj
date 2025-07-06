@@ -1,6 +1,6 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFramework>net5.0-windows</TargetFramework>
+    <TargetFramework>net7.0-windows</TargetFramework>
     <OutputType>Library</OutputType>
     <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\</SolutionDir>
     <RestorePackages>true</RestorePackages>
@@ -16,19 +16,19 @@
     <OutputPath>..\Output\Release\Wox.Plugin.Runner</OutputPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
-    <OutputPath>..\Output\Debug\Wox.Plugin.Runner</OutputPath>
+    <OutputPath>C:\Workbench\Git\Flow.Launcher\Output\Debug\Plugins\Wox.Plugin.Runner</OutputPath>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="Flow.Launcher.Plugin" Version="2.1.1" />
+    <PackageReference Include="Flow.Launcher.Plugin" Version="4.6.0" />
     <PackageReference Include="System.Data.DataSetExtensions" Version="4.5.0" />
   </ItemGroup>
-  
+
   <ItemGroup>
     <None Include="plugin.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
   </ItemGroup>
-  
+
   <ItemGroup>
     <Content Include="Images\gear.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>

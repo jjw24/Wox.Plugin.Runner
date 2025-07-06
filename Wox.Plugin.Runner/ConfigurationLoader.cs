@@ -1,19 +1,11 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
 using System.Text.Json;
 
 namespace Wox.Plugin.Runner
 {
-    interface IConfigurationLoader
-    {
-        IEnumerable<Command> LoadCommands();
-        void SaveCommands(IEnumerable<Command> commands);
-    }
-
-    class ConfigurationLoader : IConfigurationLoader
+    class ConfigurationLoader
     {
         readonly static string configPath = Environment.ExpandEnvironmentVariables(
             @$"%appdata%\FlowLauncher\Settings\Plugins\{Runner.Context.CurrentPluginMetadata.Name}");
@@ -36,11 +28,6 @@ namespace Wox.Plugin.Runner
                 return JsonSerializer.Deserialize<IEnumerable<Command>>(text) ?? new List<Command>();
 
             return new List<Command>();
-        }
-
-        public void SaveCommands(IEnumerable<Command> commands)
-        {
-            File.WriteAllText(configFile, JsonSerializer.Serialize(commands));
         }
     }
 }

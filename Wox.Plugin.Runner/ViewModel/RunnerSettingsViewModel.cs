@@ -2,7 +2,7 @@
 using System.Collections.ObjectModel;
 using System.Linq;
 
-namespace Wox.Plugin.Runner.Settings
+namespace Wox.Plugin.Runner.ViewModel
 {
     public class RunnerSettingsViewModel
     {
@@ -18,7 +18,7 @@ namespace Wox.Plugin.Runner.Settings
         public void LoadCommands()
         {
             Commands = new ObservableCollection<CommandViewModel>(
-                RunnerConfiguration.Commands.Select( c => new CommandViewModel( c ) ) );
+                Runner._settings.Commands.Select( c => new CommandViewModel( c ) ) );
         }
 
         public ObservableCollection<CommandViewModel>? Commands { get; set; }
@@ -42,7 +42,13 @@ namespace Wox.Plugin.Runner.Settings
 
         public void SaveChanges()
         {
-            RunnerConfiguration.Commands = Commands!.Select(c => c.GetCommand());
+            Runner._settings.Commands.Clear();
+            foreach (var cmd in Commands!.Select(c => c.GetCommand()))
+            {
+                Runner._settings.Commands.Add(cmd);
+            }
+
+            context.API.SaveSettingJsonStorage<Settings>();
 
             context!.API.ShowMsg("Your changes have been saved!");
         }
