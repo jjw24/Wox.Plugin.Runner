@@ -21,6 +21,9 @@ namespace Wox.Plugin.Runner
             Context = context;
             _settings = context.API.LoadSettingJsonStorage<Settings>();
             viewModel = new RunnerSettingsViewModel(Context);
+
+            // Backwards compatibility code, remove after release 2.4.0
+            ConfigurationLoader.LoadCommandsFileToSettings(_settings);
         }
 
         public List<Result> Query(Query query)

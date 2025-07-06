@@ -2,32 +2,36 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Text.Json;
+using System.Linq;
 
 namespace Wox.Plugin.Runner
 {
-    class ConfigurationLoader
+    static class ConfigurationLoader
     {
         readonly static string configPath = Environment.ExpandEnvironmentVariables(
             @$"%appdata%\FlowLauncher\Settings\Plugins\{Runner.Context.CurrentPluginMetadata.Name}");
         readonly static string configFile = Path.Combine(configPath, "commands.json");
 
-        public ConfigurationLoader()
+        /// <summary>
+        /// Backwards compatibility code, remove after release 2.4.0
+        /// </summary>
+        public static void LoadCommandsFileToSettings(Settings settings)
         {
-
-            Directory.CreateDirectory(configPath);
             if (!File.Exists(configFile))
-            {
-                File.Create(configFile).Close();
-            }
-        }
+                return;
 
-        public IEnumerable<Command> LoadCommands()
-        {
             var text = File.ReadAllText(configFile);
+            var originalCommands = new List<Command>();
             if (!string.IsNullOrEmpty(text))
-                return JsonSerializer.Deserialize<IEnumerable<Command>>(text) ?? new List<Command>();
+                originalCommands = JsonSerializer.Deserialize<List<Command>>(text) ?? new List<Command>();
 
-            return new List<Command>();
+            foreach (var command in originalCommands)
+            {
+                settings.Commands.Add(command);
+            }
+
+            var backupFile = Path.Combine(configPath, "commands_backup.json");
+            File.Move(configFile, backupFile);
         }
     }
 }
