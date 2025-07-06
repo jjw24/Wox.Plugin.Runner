@@ -30,7 +30,7 @@ namespace Wox.Plugin.Runner
                 settings.Commands.Add(command);
             }
 
-            var backupFile = Path.Combine(configPath, "commands_backup.json");
+            var backupFile = Path.Combine(Runner.Context.CurrentPluginMetadata.PluginSettingsDirectoryPath, "commands_backup.json");
             File.Move(configFile, backupFile);
         }
     }
