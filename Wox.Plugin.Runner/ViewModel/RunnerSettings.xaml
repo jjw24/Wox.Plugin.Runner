@@ -74,6 +74,7 @@
                     <RowDefinition />
                     <RowDefinition />
                     <RowDefinition />
+                    <RowDefinition />
                 </Grid.RowDefinitions>
                 <Label
                     Grid.Row="0"
@@ -157,20 +158,31 @@
                         Use {explorer} to use the currently open file explorer window's path
                     </TextBlock>
                 </StackPanel>
-                <Label
+                <CheckBox
                     Grid.Row="7"
+                    Grid.Column="1"
+                    Margin="5,10,10,0"
+                    VerticalAlignment="Top"
+                    Content="Run as Administrator"
+                    IsChecked="{Binding SelectedCommand.RunAsAdministrator, UpdateSourceTrigger=PropertyChanged}">
+                    <CheckBox.ToolTip>
+                        <TextBlock Text="Requires User Account Control (UAC) elevation" />
+                    </CheckBox.ToolTip>
+                </CheckBox>
+                <Label
+                    Grid.Row="8"
                     Margin="5,10,0,0"
                     HorizontalAlignment="Left"
                     VerticalAlignment="Top"
                     Content="Arguments:" />
                 <TextBox
-                    Grid.Row="7"
+                    Grid.Row="8"
                     Grid.Column="1"
                     Height="23"
                     Margin="5,10,10,0"
                     VerticalAlignment="Top"
                     Text="{Binding SelectedCommand.ArgumentsFormat, UpdateSourceTrigger=PropertyChanged}" />
-                <StackPanel Grid.Row="8" Grid.Column="1">
+                <StackPanel Grid.Row="9" Grid.Column="1">
                     <TextBlock
                         Margin="5,10,0,0"
                         HorizontalAlignment="Left"
