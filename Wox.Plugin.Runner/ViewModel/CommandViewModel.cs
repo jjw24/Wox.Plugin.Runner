@@ -11,6 +11,7 @@ namespace Wox.Plugin.Runner.ViewModel
             path = command.Path;
             workingDirectory = command.WorkingDirectory;
             argumentsFormat = command.ArgumentsFormat;
+            runAsAdministrator = command.RunAsAdministrator;
         }
 
         public Command Command { get; set; }
@@ -85,6 +86,20 @@ namespace Wox.Plugin.Runner.ViewModel
             }
         }
 
+        private bool runAsAdministrator;
+        public bool RunAsAdministrator
+        {
+            get
+            {
+                return runAsAdministrator;
+            }
+            set
+            {
+                runAsAdministrator = value;
+                CheckDirty();
+            }
+        }
+
         public bool IsDirty { get; set; } = false;
 
         public Command GetCommand()
@@ -98,7 +113,8 @@ namespace Wox.Plugin.Runner.ViewModel
                     Shortcut = Shortcut,
                     Path = Path,
                     WorkingDirectory = WorkingDirectory,
-                    ArgumentsFormat = ArgumentsFormat
+                    ArgumentsFormat = ArgumentsFormat,
+                    RunAsAdministrator = RunAsAdministrator
                 };
         }
 
@@ -109,7 +125,8 @@ namespace Wox.Plugin.Runner.ViewModel
                 ( Shortcut != Command.Shortcut ) ||
                 ( Path != Command.Path ) ||
                 ( WorkingDirectory != Command.WorkingDirectory ) ||
-                ( ArgumentsFormat != Command.ArgumentsFormat );
+                ( ArgumentsFormat != Command.ArgumentsFormat ) ||
+                ( RunAsAdministrator != Command.RunAsAdministrator );
         }
     }
 }

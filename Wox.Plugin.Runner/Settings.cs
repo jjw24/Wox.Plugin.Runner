@@ -10,6 +10,7 @@ namespace Wox.Plugin.Runner
         public string Path { get; set; } = "";
         public string WorkingDirectory { get; set; } = "";
         public string ArgumentsFormat { get; set; } = "";
+        public bool RunAsAdministrator { get; set; } = false;
 
         public bool UnlimitedTerms
         {

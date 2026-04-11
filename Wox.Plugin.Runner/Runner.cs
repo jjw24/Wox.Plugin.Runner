@@ -116,6 +116,12 @@ namespace Wox.Plugin.Runner
                 {
                     UseShellExecute = true
                 };
+                
+                if (command.RunAsAdministrator)
+                {
+                    startInfo.Verb = "runas";
+                }
+                
                 if (args.WorkingDirectory != null)
                 {
                     startInfo.WorkingDirectory = args.WorkingDirectory;
