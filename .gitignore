@@ -203,3 +203,6 @@ FakesAssemblies/
 
 # Visual Studio Code Editor
 .vscode/
+
+# JetBrains IDEs
+.idea/

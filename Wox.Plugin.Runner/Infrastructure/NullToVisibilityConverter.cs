@@ -1,19 +1,23 @@
 ﻿using System;
+using System.Globalization;
 using System.Windows;
 using System.Windows.Data;
 
-namespace Wox.Plugin.Runner.Infrastructure
-{
-    class NullToVisibilityConverter : IValueConverter
-    {
-        public object Convert( object? value, Type targetType, object parameter, System.Globalization.CultureInfo culture )
-        {
-            return value == null ? Visibility.Hidden : Visibility.Visible;
-        }
+namespace Wox.Plugin.Runner.Infrastructure;
 
-        public object ConvertBack( object value, Type targetType, object parameter, System.Globalization.CultureInfo culture )
-        {
-            throw new NotImplementedException();
-        }
+internal class NullToVisibilityConverter : IValueConverter
+{
+    public object Convert(object? value, Type targetType, object? parameter, CultureInfo culture)
+    {
+        var invert = parameter?.ToString()?.ToLower() == "invert";
+        var isNull = value == null || (value is string str && string.IsNullOrWhiteSpace(str));
+
+        if (invert) return isNull ? Visibility.Visible : Visibility.Hidden;
+        return isNull ? Visibility.Hidden : Visibility.Visible;
+    }
+
+    public object ConvertBack(object? value, Type targetType, object? parameter, CultureInfo culture)
+    {
+        throw new NotImplementedException();
     }
 }
