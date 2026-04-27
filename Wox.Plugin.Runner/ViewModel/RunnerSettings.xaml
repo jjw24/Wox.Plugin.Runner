@@ -1,4 +1,4 @@
-﻿<UserControl
+<UserControl
     x:Class="Wox.Plugin.Runner.ViewModel.RunnerSettings"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
@@ -37,13 +37,13 @@
             Margin="0,0,0,12"
             FontSize="16"
             FontWeight="SemiBold"
-            Foreground="{StaticResource TextPrimaryBrush}"
+            Foreground="{DynamicResource Color05B}"
             Text="Plugin Runner Commands" />
 
         <!-- Instructions with unsaved changes indicator -->
         <StackPanel Grid.Row="1" Margin="0,0,0,12" Orientation="Horizontal">
             <TextBlock
-                Foreground="{StaticResource TextSecondaryBrush}"
+                Foreground="{DynamicResource Color04B}"
                 Text="Manage your command shortcuts. Click a command to edit it."
                 TextWrapping="Wrap" />
             <TextBlock
@@ -86,7 +86,7 @@
                                                     <VisualBrush.Visual>
                                                         <TextBlock
                                                             Margin="32,0,0,0"
-                                                            Foreground="{StaticResource TextTertiaryBrush}"
+                                                            Foreground="{DynamicResource Color08B}"
                                                             Text="Search commands..." />
                                                     </VisualBrush.Visual>
                                                 </VisualBrush>
@@ -104,7 +104,7 @@
                         HorizontalAlignment="Left"
                         VerticalAlignment="Center"
                         Data="M15.5 14h-.79l-.28-.27A6.471 6.471 0 0 0 16 9.5 6.5 6.5 0 1 0 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"
-                        Fill="{StaticResource TextTertiaryBrush}"
+                        Fill="{DynamicResource Color08B}"
                         IsHitTestVisible="False"
                         Stretch="Uniform" />
                 </Grid>
@@ -126,7 +126,7 @@
                                 <TextBlock
                                     FontSize="14"
                                     FontWeight="SemiBold"
-                                    Foreground="{StaticResource TextPrimaryBrush}"
+                                    Foreground="{DynamicResource Color05B}"
                                     Text="{Binding DisplayText}"
                                     TextTrimming="CharacterEllipsis" />
 
@@ -148,7 +148,7 @@
                                 <TextBlock
                                     Margin="0,4,0,0"
                                     FontSize="11"
-                                    Foreground="{StaticResource TextSecondaryBrush}"
+                                    Foreground="{DynamicResource Color04B}"
                                     Text="{Binding Path}"
                                     TextTrimming="CharacterEllipsis"
                                     ToolTip="{Binding Path}" />
@@ -209,7 +209,7 @@
                             Grid.Column="0"
                             VerticalAlignment="Center"
                             Content="Description:"
-                            Foreground="{StaticResource TextSecondaryBrush}" />
+                            Foreground="{DynamicResource Color04B}" />
                         <TextBox
                             Grid.Row="0"
                             Grid.Column="1"
@@ -223,7 +223,7 @@
                             Grid.Column="0"
                             VerticalAlignment="Center"
                             Content="Shortcut:*"
-                            Foreground="{StaticResource TextSecondaryBrush}" />
+                            Foreground="{DynamicResource Color04B}" />
                         <StackPanel Grid.Row="1" Grid.Column="1">
                             <TextBox
                                 Margin="0,0,0,4"
@@ -270,7 +270,7 @@
                             Grid.Column="0"
                             VerticalAlignment="Center"
                             Content="Path:*"
-                            Foreground="{StaticResource TextSecondaryBrush}" />
+                            Foreground="{DynamicResource Color04B}" />
                         <Grid Grid.Row="0" Grid.Column="1">
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="*" />
@@ -316,7 +316,7 @@
                             Margin="0,12,0,0"
                             VerticalAlignment="Center"
                             Content="Working Dir:"
-                            Foreground="{StaticResource TextSecondaryBrush}" />
+                            Foreground="{DynamicResource Color04B}" />
                         <Grid
                             Grid.Row="2"
                             Grid.Column="1"
@@ -348,7 +348,7 @@
                             <TextBlock
                                 Margin="4"
                                 FontSize="12"
-                                Foreground="{StaticResource TextSecondaryBrush}"
+                                Foreground="{DynamicResource Color04B}"
                                 Text="Use {explorer} to use the currently open file explorer window's path as the working directory."
                                 TextWrapping="Wrap" />
                         </Expander>
@@ -383,7 +383,7 @@
                             Grid.Column="0"
                             VerticalAlignment="Top"
                             Content="Arguments:"
-                            Foreground="{StaticResource TextSecondaryBrush}" />
+                            Foreground="{DynamicResource Color04B}" />
                         <StackPanel Grid.Row="0" Grid.Column="1">
                             <TextBox
                                 Margin="0,0,0,8"
@@ -395,37 +395,37 @@
                                 <StackPanel Margin="4">
                                     <TextBlock
                                         FontSize="12"
-                                        Foreground="{StaticResource TextSecondaryBrush}"
+                                        Foreground="{DynamicResource Color04B}"
                                         Text="• Use {*} to allow infinite arguments from the query"
                                         TextWrapping="Wrap" />
                                     <TextBlock
                                         Margin="0,4,0,0"
                                         FontSize="12"
-                                        Foreground="{StaticResource TextSecondaryBrush}"
+                                        Foreground="{DynamicResource Color04B}"
                                         Text="• Use {0}, {1}, {2}... for positional arguments"
                                         TextWrapping="Wrap" />
                                     <Border
                                         Margin="0,8,0,0"
                                         Padding="8"
-                                        Background="{StaticResource BackgroundSecondaryBrush}"
+                                        Background="{DynamicResource Color07B}"
                                         CornerRadius="4">
                                         <StackPanel>
                                             <TextBlock
                                                 FontFamily="Consolas"
                                                 FontSize="11"
-                                                Foreground="{StaticResource TextSecondaryBrush}"
+                                                Foreground="{DynamicResource Color04B}"
                                                 Text="Example:" />
                                             <TextBlock
                                                 Margin="0,4,0,0"
                                                 FontFamily="Consolas"
                                                 FontSize="11"
-                                                Foreground="{StaticResource TextPrimaryBrush}"
+                                                Foreground="{DynamicResource Color05B}"
                                                 Text="Arguments: -h {0} -p {1}" />
                                             <TextBlock
                                                 Margin="0,2,0,0"
                                                 FontFamily="Consolas"
                                                 FontSize="11"
-                                                Foreground="{StaticResource TextPrimaryBrush}"
+                                                Foreground="{DynamicResource Color05B}"
                                                 Text="Query: r myshortcut arg1 22" />
                                             <TextBlock
                                                 Margin="0,2,0,0"

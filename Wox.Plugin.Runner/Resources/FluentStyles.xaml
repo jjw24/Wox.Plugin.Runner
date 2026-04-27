@@ -11,16 +11,11 @@
     <SolidColorBrush x:Key="WarningBrush" Color="#FFB900" />
     <SolidColorBrush x:Key="DirtyIndicatorBrush" Color="#CA5010" />
     
-    <!-- Theme-aware colors using semi-transparent overlays -->
+    <!-- Theme-aware colors: resolved from Flow Launcher's active Light.xaml / Dark.xaml.
+         Color05B  = primary text    Color04B = secondary text   Color08B = tertiary text
+         Color07B  = secondary bg    Color13B = border           Color15B = border hover
+         CustomContextHover = list hover bg   Color21B = list selected bg -->
     <SolidColorBrush x:Key="BackgroundBrush" Color="Transparent" />
-    <SolidColorBrush x:Key="BackgroundSecondaryBrush" Color="#15FFFFFF" />
-    <SolidColorBrush x:Key="BorderBrush" Color="#30FFFFFF" />
-    <SolidColorBrush x:Key="BorderHoverBrush" Color="#50FFFFFF" />
-    <SolidColorBrush x:Key="TextPrimaryBrush" Color="#FFFFFFFF" />
-    <SolidColorBrush x:Key="TextSecondaryBrush" Color="#CCFFFFFF" />
-    <SolidColorBrush x:Key="TextTertiaryBrush" Color="#99FFFFFF" />
-    <SolidColorBrush x:Key="ListItemHoverBrush" Color="#20FFFFFF" />
-    <SolidColorBrush x:Key="ListItemSelectedBrush" Color="#40FFFFFF" />
 
     <!-- Fluent Button Style -->
     <Style x:Key="FluentButton" TargetType="Button">
@@ -74,8 +69,8 @@
     <!-- Fluent Secondary Button Style (for Delete, etc.) -->
     <Style x:Key="FluentSecondaryButton" TargetType="Button" BasedOn="{StaticResource FluentButton}">
         <Setter Property="Background" Value="{StaticResource BackgroundBrush}" />
-        <Setter Property="Foreground" Value="{StaticResource TextPrimaryBrush}" />
-        <Setter Property="BorderBrush" Value="{StaticResource BorderBrush}" />
+        <Setter Property="Foreground" Value="{DynamicResource Color05B}" />
+        <Setter Property="BorderBrush" Value="{DynamicResource Color13B}" />
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="Button">
@@ -101,11 +96,11 @@
                     </Border>
                     <ControlTemplate.Triggers>
                         <Trigger Property="IsMouseOver" Value="True">
-                            <Setter TargetName="border" Property="Background" Value="{StaticResource BackgroundSecondaryBrush}" />
-                            <Setter TargetName="border" Property="BorderBrush" Value="{StaticResource BorderHoverBrush}" />
+                            <Setter TargetName="border" Property="Background" Value="{DynamicResource Color07B}" />
+                            <Setter TargetName="border" Property="BorderBrush" Value="{DynamicResource Color15B}" />
                         </Trigger>
                         <Trigger Property="IsPressed" Value="True">
-                            <Setter TargetName="border" Property="Background" Value="{StaticResource BorderBrush}" />
+                            <Setter TargetName="border" Property="Background" Value="{DynamicResource Color13B}" />
                         </Trigger>
                         <Trigger Property="IsEnabled" Value="False">
                             <Setter Property="Opacity" Value="0.5" />
@@ -119,9 +114,9 @@
     <!-- Fluent TextBox Style -->
     <Style x:Key="FluentTextBox" TargetType="TextBox">
         <Setter Property="Background" Value="{StaticResource BackgroundBrush}" />
-        <Setter Property="Foreground" Value="{StaticResource TextPrimaryBrush}" />
-        <Setter Property="CaretBrush" Value="{StaticResource TextPrimaryBrush}" />
-        <Setter Property="BorderBrush" Value="{StaticResource BorderBrush}" />
+        <Setter Property="Foreground" Value="{DynamicResource Color05B}" />
+        <Setter Property="CaretBrush" Value="{DynamicResource Color05B}" />
+        <Setter Property="BorderBrush" Value="{DynamicResource Color13B}" />
         <Setter Property="BorderThickness" Value="1" />
         <Setter Property="Padding" Value="10,6" />
         <Setter Property="FontSize" Value="13" />
@@ -145,7 +140,7 @@
                     </Border>
                     <ControlTemplate.Triggers>
                         <Trigger Property="IsMouseOver" Value="True">
-                            <Setter TargetName="border" Property="BorderBrush" Value="{StaticResource BorderHoverBrush}" />
+                            <Setter TargetName="border" Property="BorderBrush" Value="{DynamicResource Color15B}" />
                         </Trigger>
                         <Trigger Property="IsFocused" Value="True">
                             <Setter TargetName="border" Property="BorderBrush" Value="{StaticResource AccentBrush}" />
@@ -169,7 +164,7 @@
     <!-- Fluent ListBox Style -->
     <Style x:Key="FluentListBox" TargetType="ListBox">
         <Setter Property="Background" Value="{StaticResource BackgroundBrush}" />
-        <Setter Property="BorderBrush" Value="{StaticResource BorderBrush}" />
+        <Setter Property="BorderBrush" Value="{DynamicResource Color13B}" />
         <Setter Property="BorderThickness" Value="1" />
         <Setter Property="ScrollViewer.HorizontalScrollBarVisibility" Value="Disabled" />
         <Setter Property="ScrollViewer.VerticalScrollBarVisibility" Value="Auto" />
@@ -213,10 +208,10 @@
                     </Border>
                     <ControlTemplate.Triggers>
                         <Trigger Property="IsMouseOver" Value="True">
-                            <Setter TargetName="border" Property="Background" Value="{StaticResource ListItemHoverBrush}" />
+                            <Setter TargetName="border" Property="Background" Value="{DynamicResource CustomContextHover}" />
                         </Trigger>
                         <Trigger Property="IsSelected" Value="True">
-                            <Setter TargetName="border" Property="Background" Value="{StaticResource ListItemSelectedBrush}" />
+                            <Setter TargetName="border" Property="Background" Value="{DynamicResource Color21B}" />
                             <Setter TargetName="border" Property="BorderBrush" Value="{StaticResource AccentBrush}" />
                         </Trigger>
                     </ControlTemplate.Triggers>
@@ -227,7 +222,7 @@
 
     <!-- Fluent CheckBox Style -->
     <Style x:Key="FluentCheckBox" TargetType="CheckBox">
-        <Setter Property="Foreground" Value="{StaticResource TextPrimaryBrush}" />
+        <Setter Property="Foreground" Value="{DynamicResource Color05B}" />
         <Setter Property="FontSize" Value="13" />
         <Setter Property="Cursor" Value="Hand" />
         <Setter Property="Template">
@@ -240,7 +235,7 @@
                             Height="18"
                             Margin="0,0,8,0"
                             Background="{StaticResource BackgroundBrush}"
-                            BorderBrush="{StaticResource BorderBrush}"
+                            BorderBrush="{DynamicResource Color13B}"
                             BorderThickness="2"
                             CornerRadius="3"
                             SnapsToDevicePixels="True">
@@ -261,7 +256,7 @@
                             <Setter TargetName="checkBorder" Property="BorderBrush" Value="{StaticResource AccentBrush}" />
                         </Trigger>
                         <Trigger Property="IsMouseOver" Value="True">
-                            <Setter TargetName="checkBorder" Property="BorderBrush" Value="{StaticResource BorderHoverBrush}" />
+                            <Setter TargetName="checkBorder" Property="BorderBrush" Value="{DynamicResource Color15B}" />
                         </Trigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>
@@ -271,7 +266,7 @@
 
     <!-- Fluent GroupBox Style -->
     <Style x:Key="FluentGroupBox" TargetType="GroupBox">
-        <Setter Property="BorderBrush" Value="{StaticResource BorderBrush}" />
+        <Setter Property="BorderBrush" Value="{DynamicResource Color13B}" />
         <Setter Property="BorderThickness" Value="1" />
         <Setter Property="Padding" Value="12" />
         <Setter Property="Margin" Value="0,0,0,12" />
@@ -303,7 +298,7 @@
                             <ContentPresenter
                                 ContentSource="Header"
                                 TextElement.FontWeight="SemiBold"
-                                TextElement.Foreground="{StaticResource TextSecondaryBrush}" />
+                                TextElement.Foreground="{DynamicResource Color04B}" />
                         </Border>
                     </Grid>
                 </ControlTemplate>
@@ -313,14 +308,14 @@
 
     <!-- Fluent Expander Style -->
     <Style x:Key="FluentExpander" TargetType="Expander">
-        <Setter Property="BorderBrush" Value="{StaticResource BorderBrush}" />
+        <Setter Property="BorderBrush" Value="{DynamicResource Color13B}" />
         <Setter Property="BorderThickness" Value="0" />
         <Setter Property="Margin" Value="0,4" />
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="Expander">
                     <Border
-                        Background="{StaticResource BackgroundSecondaryBrush}"
+                        Background="{DynamicResource Color07B}"
                         BorderBrush="{TemplateBinding BorderBrush}"
                         BorderThickness="{TemplateBinding BorderThickness}"
                         CornerRadius="4">
@@ -335,7 +330,7 @@
                                 Content="{TemplateBinding Header}"
                                 Cursor="Hand"
                                 DockPanel.Dock="Top"
-                                Foreground="{StaticResource TextSecondaryBrush}"
+                                Foreground="{DynamicResource Color04B}"
                                 IsChecked="{Binding IsExpanded, Mode=TwoWay, RelativeSource={RelativeSource TemplatedParent}}">
                                 <ToggleButton.Template>
                                     <ControlTemplate TargetType="ToggleButton">
@@ -354,7 +349,7 @@
                                                     HorizontalAlignment="Center"
                                                     VerticalAlignment="Center"
                                                     Data="M 0 0 L 4 4 L 0 8"
-                                                    Fill="{StaticResource TextSecondaryBrush}"
+                                                    Fill="{DynamicResource Color04B}"
                                                     RenderTransformOrigin="0.5,0.5">
                                                     <Path.RenderTransform>
                                                         <RotateTransform Angle="0" />
