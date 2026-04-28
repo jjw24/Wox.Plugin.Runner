@@ -1,132 +1,128 @@
-﻿
-namespace Wox.Plugin.Runner.ViewModel
+﻿using System.Collections.Generic;
+using System.ComponentModel;
+using System.Runtime.CompilerServices;
+
+namespace Wox.Plugin.Runner.ViewModel;
+
+public sealed class CommandViewModel : INotifyPropertyChanged
 {
-    public class CommandViewModel
+    private string _argumentsFormat;
+
+    private string _description;
+
+    private bool _isDirty;
+
+    private string _path;
+
+    private bool _runAsAdministrator;
+
+    private string _shortcut;
+
+    private string _workingDirectory;
+
+    public CommandViewModel(Command command)
     {
-        public CommandViewModel( Command command )
+        Command = command;
+        _description = command.Description;
+        _shortcut = command.Shortcut;
+        _path = command.Path;
+        _workingDirectory = command.WorkingDirectory;
+        _argumentsFormat = command.ArgumentsFormat;
+        _runAsAdministrator = command.RunAsAdministrator;
+    }
+
+    private Command Command { get; }
+
+    public string Description
+    {
+        get => _description;
+        set => SetField(ref _description, value);
+    }
+
+    public string Shortcut
+    {
+        get => _shortcut;
+        set => SetField(ref _shortcut, value);
+    }
+
+    public string Path
+    {
+        get => _path;
+        set => SetField(ref _path, value);
+    }
+
+    public string WorkingDirectory
+    {
+        get => _workingDirectory;
+        set => SetField(ref _workingDirectory, value);
+    }
+
+    public string ArgumentsFormat
+    {
+        get => _argumentsFormat;
+        set => SetField(ref _argumentsFormat, value);
+    }
+
+    public bool RunAsAdministrator
+    {
+        get => _runAsAdministrator;
+        set => SetField(ref _runAsAdministrator, value);
+    }
+
+    public bool IsDirty
+    {
+        get => _isDirty;
+        set
         {
-            Command = command;
-            description = command.Description;
-            shortcut = command.Shortcut;
-            path = command.Path;
-            workingDirectory = command.WorkingDirectory;
-            argumentsFormat = command.ArgumentsFormat;
-            runAsAdministrator = command.RunAsAdministrator;
+            if (_isDirty == value) return;
+            _isDirty = value;
+            OnPropertyChanged();
+            OnPropertyChanged(nameof(DirtyIndicator));
+            OnPropertyChanged(nameof(DisplayText));
         }
+    }
 
-        public Command Command { get; set; }
+    public string DirtyIndicator => IsDirty ? "● " : "";
 
-        private string description;
-        public string Description
+    public string DisplayText => $"{DirtyIndicator}{Description}";
+    public event PropertyChangedEventHandler? PropertyChanged;
+
+    private void OnPropertyChanged([CallerMemberName] string? propertyName = null)
+    {
+        PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+    }
+
+    private void SetField<T>(ref T field, T value, [CallerMemberName] string? propertyName = null)
+    {
+        if (EqualityComparer<T>.Default.Equals(field, value)) return;
+        field = value;
+        OnPropertyChanged(propertyName);
+        CheckDirty();
+    }
+
+    public Command GetCommand()
+    {
+        if (!IsDirty)
+            return Command;
+        return new Command
         {
-            get
-            {
-                return description;
-            }
-            set
-            {
-                description = value;
-                CheckDirty();
-            }
-        }
+            Description = Description,
+            Shortcut = Shortcut,
+            Path = Path,
+            WorkingDirectory = WorkingDirectory,
+            ArgumentsFormat = ArgumentsFormat,
+            RunAsAdministrator = RunAsAdministrator
+        };
+    }
 
-        private string shortcut;
-        public string Shortcut
-        {
-            get
-            {
-                return shortcut;
-            }
-            set
-            {
-                shortcut = value;
-                CheckDirty();
-            }
-        }
-
-        private string path;
-        public string Path
-        {
-            get
-            {
-                return path;
-            }
-            set
-            {
-                path = value;
-                CheckDirty();
-            }
-        }
-
-        private string workingDirectory;
-
-        public string WorkingDirectory
-        {
-            get {
-                return workingDirectory;
-                
-            }
-            set {
-                workingDirectory = value;
-                CheckDirty();
-            }
-        }
-
-        private string argumentsFormat;
-        public string ArgumentsFormat
-        {
-            get
-            {
-                return argumentsFormat;
-            }
-            set
-            {
-                argumentsFormat = value;
-                CheckDirty();
-            }
-        }
-
-        private bool runAsAdministrator;
-        public bool RunAsAdministrator
-        {
-            get
-            {
-                return runAsAdministrator;
-            }
-            set
-            {
-                runAsAdministrator = value;
-                CheckDirty();
-            }
-        }
-
-        public bool IsDirty { get; set; } = false;
-
-        public Command GetCommand()
-        {
-            if ( !IsDirty )
-                return Command;
-            else
-                return new Command
-                {
-                    Description = Description,
-                    Shortcut = Shortcut,
-                    Path = Path,
-                    WorkingDirectory = WorkingDirectory,
-                    ArgumentsFormat = ArgumentsFormat,
-                    RunAsAdministrator = RunAsAdministrator
-                };
-        }
-
-        private void CheckDirty()
-        {
-            IsDirty =
-                ( Description != Command.Description ) ||
-                ( Shortcut != Command.Shortcut ) ||
-                ( Path != Command.Path ) ||
-                ( WorkingDirectory != Command.WorkingDirectory ) ||
-                ( ArgumentsFormat != Command.ArgumentsFormat ) ||
-                ( RunAsAdministrator != Command.RunAsAdministrator );
-        }
+    private void CheckDirty()
+    {
+        IsDirty =
+            Description != Command.Description ||
+            Shortcut != Command.Shortcut ||
+            Path != Command.Path ||
+            WorkingDirectory != Command.WorkingDirectory ||
+            ArgumentsFormat != Command.ArgumentsFormat ||
+            RunAsAdministrator != Command.RunAsAdministrator;
     }
 }
