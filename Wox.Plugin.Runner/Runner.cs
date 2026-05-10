@@ -21,9 +21,6 @@ public class Runner : IPlugin, ISettingProvider
         Context = context;
         Settings = context.API.LoadSettingJsonStorage<Settings>();
         _viewModel = new RunnerSettingsViewModel(Context);
-
-        // Backwards compatibility code, remove after release 2.4.0
-        ConfigurationLoader.LoadCommandsFileToSettings(Settings);
     }
 
     public List<Result> Query(Query query)
