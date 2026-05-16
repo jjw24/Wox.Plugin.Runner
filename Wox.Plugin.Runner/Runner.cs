@@ -145,7 +145,8 @@ public class Runner : IPlugin, ISettingProvider
                 UseShellExecute = true
             };
 
-            if (command.RunAsAdministrator) startInfo.Verb = "runas";
+            if (command.RunAsAdministrator)
+                startInfo.Verb = "runas";
 
             // Working directory if set via settings will be args.WorkingDirectory
             // If not set, args.WorkingDirectory will default to the directory of the executable
