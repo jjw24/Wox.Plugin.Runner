@@ -102,8 +102,6 @@ public sealed class CommandViewModel : INotifyPropertyChanged
 
     public Command GetCommand()
     {
-        if (!IsDirty)
-            return Command;
         return new Command
         {
             Description = Description,
