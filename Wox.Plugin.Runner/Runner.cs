@@ -40,7 +40,7 @@ public class Runner : IPlugin, ISettingProvider
                         Score = 50,
                         Title = c.Description,
                         SubTitle = $"[{c.Shortcut}] {GetPathPreview(c.Path)}",
-                        AutoCompleteText = GetAutoCompleteText(query.ActionKeyword, c.Shortcut),
+                        AutoCompleteText = GetAutoCompleteText(query.ActionKeyword, c.Shortcut, !string.IsNullOrEmpty(c.ArgumentsFormat)),
                         Action = _ => RunCommand(c),
                         IcoPath = !string.IsNullOrEmpty(c.Path) && File.Exists(c.Path) ? c.Path : "Images/gear.png"
                     })
@@ -72,7 +72,7 @@ public class Runner : IPlugin, ISettingProvider
                     SubTitle = terms.Length > 0
                         ? $"[{c.Shortcut}] Run with arguments: {string.Join(" ", terms)}"
                         : $"[{c.Shortcut}] {GetPathPreview(c.Path)}",
-                    AutoCompleteText = GetAutoCompleteText(query.ActionKeyword, c.Shortcut),
+                    AutoCompleteText = GetAutoCompleteText(query.ActionKeyword, c.Shortcut, !string.IsNullOrEmpty(c.ArgumentsFormat)),
                     Action = _ => RunCommand(c, terms),
                     IcoPath = !string.IsNullOrEmpty(c.Path) && File.Exists(c.Path) ? c.Path : "Images/gear.png"
                 })
@@ -97,17 +97,17 @@ public class Runner : IPlugin, ISettingProvider
                 Score = Context.API.FuzzySearch(shortcut, c.Shortcut).Score,
                 Title = c.Description,
                 SubTitle = $"[{c.Shortcut}] {GetPathPreview(c.Path)}",
-                AutoCompleteText = GetAutoCompleteText(actionKeyword, c.Shortcut),
+                AutoCompleteText = GetAutoCompleteText(actionKeyword, c.Shortcut, !string.IsNullOrEmpty(c.ArgumentsFormat)),
                 Action = _ => RunCommand(c, terms),
                 IcoPath = !string.IsNullOrEmpty(c.Path) && File.Exists(c.Path) ? c.Path : "Images/gear.png"
             }).Where(r => r.Score > 0)
             .ToList();
     }
 
-    private static string GetAutoCompleteText(string actionKeyword, string shortcut) 
+    private static string GetAutoCompleteText(string actionKeyword, string shortcut, bool hasArguements) 
         => string.IsNullOrWhiteSpace(actionKeyword)
-            ? shortcut
-            : $"{actionKeyword} {shortcut}";
+            ? $"{shortcut}{(hasArguements ? " " : string.Empty)}"
+            : $"{actionKeyword} {shortcut}{(hasArguements ? " " : string.Empty)}";
 
     private static string GetPathPreview(string? path)
     {
