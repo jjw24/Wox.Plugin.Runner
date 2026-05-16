@@ -147,21 +147,18 @@ public class Runner : IPlugin, ISettingProvider
 
             if (command.RunAsAdministrator) startInfo.Verb = "runas";
 
-            // Only validate working directory if one was explicitly configured by the user
-            if (!string.IsNullOrEmpty(command.WorkingDirectory) && !string.IsNullOrEmpty(args.WorkingDirectory))
+            // Working directory if set via settings will be args.WorkingDirectory
+            // If not set, args.WorkingDirectory will default to the directory of the executable
+            if (Directory.Exists(args.WorkingDirectory))
             {
-                // Validate working directory exists
-                if (!Directory.Exists(args.WorkingDirectory))
-                {
-                    Context.API.ShowMsg("Error: Working Directory Not Found",
-                        $"The working directory does not exist:\n{args.WorkingDirectory}\n\n" +
-                        $"The command will run without a specific working directory.");
-                    Context.API.LogWarn(nameof(Runner), $"Working directory not found: {args.WorkingDirectory}");
-                }
-                else
-                {
-                    startInfo.WorkingDirectory = args.WorkingDirectory;
-                }
+                startInfo.WorkingDirectory = args.WorkingDirectory;
+            }
+            else
+            {
+                Context.API.ShowMsg("Error: Working Directory Not Found",
+                    $"The working directory does not exist:\n{args.WorkingDirectory}\n\n" +
+                    $"The command will run from the plugin's directory.");
+                Context.API.LogWarn(nameof(Runner), $"Working directory not found: {args.WorkingDirectory}");
             }
 
             Process.Start(startInfo);
