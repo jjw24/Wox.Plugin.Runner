@@ -158,7 +158,7 @@ public class Runner : IPlugin, ISettingProvider
             {
                 Context.API.ShowMsg("Error: Working Directory Not Found",
                     $"The working directory does not exist:\n{args.WorkingDirectory}\n\n" +
-                    $"The command will run from the plugin's directory.");
+                    $"The command will run from the application's directory instead.");
                 Context.API.LogWarn(nameof(Runner), $"Working directory not found: {args.WorkingDirectory}");
             }
 
