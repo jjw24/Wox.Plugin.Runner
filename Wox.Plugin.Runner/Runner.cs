@@ -40,6 +40,7 @@ public class Runner : IPlugin, ISettingProvider
                         Score = 50,
                         Title = c.Description,
                         SubTitle = $"[{c.Shortcut}] {GetPathPreview(c.Path)}",
+                        AutoCompleteText = GetAutoCompleteText(query.ActionKeyword, c.Shortcut),
                         Action = _ => RunCommand(c),
                         IcoPath = !string.IsNullOrEmpty(c.Path) && File.Exists(c.Path) ? c.Path : "Images/gear.png"
                     })
@@ -71,13 +72,14 @@ public class Runner : IPlugin, ISettingProvider
                     SubTitle = terms.Length > 0
                         ? $"[{c.Shortcut}] Run with arguments: {string.Join(" ", terms)}"
                         : $"[{c.Shortcut}] {GetPathPreview(c.Path)}",
+                    AutoCompleteText = GetAutoCompleteText(query.ActionKeyword, c.Shortcut),
                     Action = _ => RunCommand(c, terms),
                     IcoPath = !string.IsNullOrEmpty(c.Path) && File.Exists(c.Path) ? c.Path : "Images/gear.png"
                 })
                 .ToList();
 
             // no exact match found, tries to find a fuzzy match against existing plugin commands
-            if (!results.Any()) results = FuzzySearchCommand(shortcut, terms);
+            if (!results.Any()) results = FuzzySearchCommand(shortcut, terms, query.ActionKeyword);
         }
 
         return results;
@@ -88,18 +90,24 @@ public class Runner : IPlugin, ISettingProvider
         return new RunnerSettings(_viewModel!);
     }
 
-    private List<Result> FuzzySearchCommand(string shortcut, string[] terms)
+    private List<Result> FuzzySearchCommand(string shortcut, string[] terms, string actionKeyword)
     {
         return Settings.Commands.Select(c => new Result
             {
                 Score = Context.API.FuzzySearch(shortcut, c.Shortcut).Score,
                 Title = c.Description,
                 SubTitle = $"[{c.Shortcut}] {GetPathPreview(c.Path)}",
+                AutoCompleteText = GetAutoCompleteText(actionKeyword, c.Shortcut),
                 Action = _ => RunCommand(c, terms),
                 IcoPath = !string.IsNullOrEmpty(c.Path) && File.Exists(c.Path) ? c.Path : "Images/gear.png"
             }).Where(r => r.Score > 0)
             .ToList();
     }
+
+    private static string GetAutoCompleteText(string actionKeyword, string shortcut) 
+        => string.IsNullOrWhiteSpace(actionKeyword)
+            ? shortcut
+            : $"{actionKeyword} {shortcut}";
 
     private static string GetPathPreview(string? path)
     {
