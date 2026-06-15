@@ -255,7 +255,9 @@ public class Runner : IPlugin, ISettingProvider
             workingDir = openExplorerPaths.FirstOrDefault();
         }
 
-        if (string.IsNullOrEmpty(workingDir))
+        // A URL has no local directory, so deriving one would produce an invalid
+        // working directory (triggering a "Working Directory Not Found" warning).
+        if (string.IsNullOrEmpty(workingDir) && !IsUrl(c.Path))
             // Use directory where executable is based.
             workingDir = Path.GetDirectoryName(c.Path);
 
@@ -266,6 +268,9 @@ public class Runner : IPlugin, ISettingProvider
             WorkingDirectory = workingDir
         };
     }
+
+    private static bool IsUrl(string path)
+        => Uri.TryCreate(path, UriKind.Absolute, out var uri) && !uri.IsFile;
 
     private sealed class ProcessArguments
     {
