@@ -156,14 +156,16 @@ public class Runner : IPlugin, ISettingProvider
             if (command.RunAsAdministrator)
                 startInfo.Verb = "runas";
 
-            // Working directory if set via settings will be args.WorkingDirectory
-            // If not set, args.WorkingDirectory will default to the directory of the executable
+            // Working directory if set via settings will be args.WorkingDirectory.
+            // If not set (e.g. when the command path is a URL), args.WorkingDirectory will be
+            // empty and the process simply runs from the application's directory.
             if (Directory.Exists(args.WorkingDirectory))
             {
                 startInfo.WorkingDirectory = args.WorkingDirectory;
             }
-            else
+            else if (!string.IsNullOrEmpty(args.WorkingDirectory))
             {
+                // Only warn when a working directory was actually resolved but does not exist on disk.
                 Context.API.ShowMsg("Error: Working Directory Not Found",
                     $"The working directory does not exist:\n{args.WorkingDirectory}\n\n" +
                     $"The command will run from the application's directory instead.");
