@@ -163,7 +163,7 @@ public class Runner : IPlugin, ISettingProvider
             {
                 startInfo.WorkingDirectory = args.WorkingDirectory;
             }
-            else if (!string.IsNullOrEmpty(args.WorkingDirectory))
+            else if (!string.IsNullOrWhiteSpace(args.WorkingDirectory))
             {
                 // Only warn when a working directory was actually resolved but does not exist on disk.
                 Context.API.ShowMsg("Error: Working Directory Not Found",
@@ -259,7 +259,7 @@ public class Runner : IPlugin, ISettingProvider
 
         // A URL has no local directory, so deriving one would produce an invalid
         // working directory (triggering a "Working Directory Not Found" warning).
-        if (string.IsNullOrEmpty(workingDir) && !IsUrl(c.Path))
+        if (string.IsNullOrWhiteSpace(workingDir) && !IsUrl(c.Path))
             // Use directory where executable is based.
             workingDir = Path.GetDirectoryName(c.Path);
 
