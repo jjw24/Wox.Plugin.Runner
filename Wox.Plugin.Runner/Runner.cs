@@ -156,14 +156,16 @@ public class Runner : IPlugin, ISettingProvider
             if (command.RunAsAdministrator)
                 startInfo.Verb = "runas";
 
-            // Working directory if set via settings will be args.WorkingDirectory
-            // If not set, args.WorkingDirectory will default to the directory of the executable
+            // Working directory if set via settings will be args.WorkingDirectory.
+            // If not set (e.g. when the command path is a URL), args.WorkingDirectory will be
+            // empty and the process simply runs from the application's directory.
             if (Directory.Exists(args.WorkingDirectory))
             {
                 startInfo.WorkingDirectory = args.WorkingDirectory;
             }
-            else
+            else if (!string.IsNullOrWhiteSpace(args.WorkingDirectory))
             {
+                // Only warn when a working directory was actually resolved but does not exist on disk.
                 Context.API.ShowMsg("Error: Working Directory Not Found",
                     $"The working directory does not exist:\n{args.WorkingDirectory}\n\n" +
                     $"The command will run from the application's directory instead.");
@@ -255,7 +257,9 @@ public class Runner : IPlugin, ISettingProvider
             workingDir = openExplorerPaths.FirstOrDefault();
         }
 
-        if (string.IsNullOrEmpty(workingDir))
+        // A URL has no local directory, so deriving one would produce an invalid
+        // working directory (triggering a "Working Directory Not Found" warning).
+        if (string.IsNullOrWhiteSpace(workingDir) && !IsUrl(c.Path))
             // Use directory where executable is based.
             workingDir = Path.GetDirectoryName(c.Path);
 
@@ -266,6 +270,9 @@ public class Runner : IPlugin, ISettingProvider
             WorkingDirectory = workingDir
         };
     }
+
+    private static bool IsUrl(string path)
+        => Uri.TryCreate(path, UriKind.Absolute, out var uri) && !uri.IsFile;
 
     private sealed class ProcessArguments
     {
