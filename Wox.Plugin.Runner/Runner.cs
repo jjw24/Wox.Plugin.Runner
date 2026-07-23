@@ -6,6 +6,7 @@ using System.IO;
 using System.Linq;
 using System.Windows.Controls;
 using Flow.Launcher.Plugin;
+using Wox.Plugin.Runner.Infrastructure;
 using Wox.Plugin.Runner.ViewModel;
 
 namespace Wox.Plugin.Runner;
@@ -138,7 +139,7 @@ public class Runner : IPlugin, ISettingProvider
                 return false;
             }
 
-            if (!File.Exists(args.FileName) && !IsShellCommand(args.FileName))
+            if (!ExecutablePathResolver.CanResolve(args.FileName))
             {
                 Context.API.ShowMsg("Error: File Not Found",
                     $"The file does not exist:\n{args.FileName}\n\n" +
@@ -222,14 +223,6 @@ public class Runner : IPlugin, ISettingProvider
         }
 
         return true;
-    }
-
-    private static bool IsShellCommand(string fileName)
-    {
-        // Check if it's a known shell built-in command or relative path
-        var name = Path.GetFileName(fileName).ToLowerInvariant();
-        var shellCommands = new[] { "cmd", "cmd.exe", "powershell", "powershell.exe", "pwsh", "pwsh.exe" };
-        return shellCommands.Contains(name) || !Path.IsPathRooted(fileName);
     }
 
     private ProcessArguments GetProcessArguments(Command c, IEnumerable<string>? terms)
