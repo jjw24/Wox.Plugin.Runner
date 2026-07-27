@@ -11,6 +11,7 @@ using DragEventArgs = System.Windows.DragEventArgs;
 using DragDropEffects = System.Windows.DragDropEffects;
 using ListBox = System.Windows.Controls.ListBox;
 using MouseEventArgs = System.Windows.Input.MouseEventArgs;
+using Wox.Plugin.Runner.Infrastructure;
 
 namespace Wox.Plugin.Runner.ViewModel;
 
@@ -75,10 +76,13 @@ public partial class RunnerSettings
     private void btnSaveChanges_Click(object sender, RoutedEventArgs e)
     {
         if (_viewModel.Commands != null &&
-            _viewModel.Commands.Any(c => string.IsNullOrEmpty(c.Shortcut) || string.IsNullOrEmpty(c.Path)))
+            _viewModel.Commands.Any(c =>
+                string.IsNullOrWhiteSpace(c.Shortcut) ||
+                !ExecutablePathResolver.CanResolve(c.Path)))
         {
             MessageBox.Show(
-                "One or more commands is missing a Shortcut or Path. Set a Shortcut and Path and try again.", "",
+                "One or more commands are missing a Shortcut or valid executable Path.\n\n" +
+                "You can enter a full path or an executable name that is available on PATH.", "",
                 MessageBoxButtons.OK, MessageBoxIcon.Warning);
             return;
         }
