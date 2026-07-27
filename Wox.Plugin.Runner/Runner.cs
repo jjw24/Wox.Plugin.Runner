@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Text;
 using System.Windows.Controls;
 using Flow.Launcher.Plugin;
 using Wox.Plugin.Runner.Infrastructure;
@@ -50,7 +51,7 @@ public class Runner : IPlugin, ISettingProvider
         // triggers when no action keyword is set
         else
         {
-            var splittedSearch = search.Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
+            var splittedSearch = SplitArguments(search);
 
             var shortcut = splittedSearch[0];
 
@@ -234,12 +235,12 @@ public class Runner : IPlugin, ISettingProvider
             // command's arguments HAS an infinite flag, thus user is able to manually pass infinite amount of arguments
             if (c.ArgumentsFormat.Contains("{*}"))
                 // add user specified arguments to the arguments to be passed
-                argString = c.ArgumentsFormat.Replace("{*}", terms != null ? string.Join(" ", terms) : "");
+                argString = c.ArgumentsFormat.Replace("{*}", terms != null ? string.Join(" ", terms.Select(QuoteIfNeeded)) : "");
             // command's arguments HAS flag/s, thus user is able to manually pass in arguments e.g. settings: {0} {1}
             // or command's arguments HAS set normal text arguments e.g. settings: -h myremotecomp -p 22
             else
                 argString = terms != null
-                    ? string.Format(c.ArgumentsFormat, terms.ToArray<object?>())
+                    ? string.Format(c.ArgumentsFormat, terms.Select(QuoteIfNeeded).ToArray<object?>())
                     : c.ArgumentsFormat;
         }
 
@@ -266,6 +267,54 @@ public class Runner : IPlugin, ISettingProvider
 
     private static bool IsUrl(string path)
         => Uri.TryCreate(path, UriKind.Absolute, out var uri) && !uri.IsFile;
+
+    /// <summary>
+    /// Splits a command-line input string into tokens, respecting single- and double-quoted groups
+    /// so that arguments containing spaces can be passed as a single term.
+    /// </summary>
+    private static string[] SplitArguments(string input)
+    {
+        var args = new List<string>();
+        var current = new StringBuilder();
+        var inQuotes = false;
+        var quoteChar = '\0';
+
+        foreach (var c in input)
+        {
+            if (inQuotes)
+            {
+                if (c == quoteChar)
+                    inQuotes = false;
+                else
+                    current.Append(c);
+            }
+            else if (c == '"' || c == '\'')
+            {
+                inQuotes = true;
+                quoteChar = c;
+            }
+            else if (c == ' ')
+            {
+                if (current.Length > 0)
+                {
+                    args.Add(current.ToString());
+                    current.Clear();
+                }
+            }
+            else
+            {
+                current.Append(c);
+            }
+        }
+
+        if (current.Length > 0)
+            args.Add(current.ToString());
+
+        return args.ToArray();
+    }
+
+    private static string QuoteIfNeeded(string arg)
+        => arg.Contains(' ') ? $"\"{arg}\"" : arg;
 
     private sealed class ProcessArguments
     {
