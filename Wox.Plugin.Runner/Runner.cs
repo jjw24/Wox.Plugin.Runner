@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Text.RegularExpressions;
 using System.Windows.Controls;
 using Flow.Launcher.Plugin;
 using Wox.Plugin.Runner.Infrastructure;
@@ -238,9 +239,27 @@ public class Runner : IPlugin, ISettingProvider
             // command's arguments HAS flag/s, thus user is able to manually pass in arguments e.g. settings: {0} {1}
             // or command's arguments HAS set normal text arguments e.g. settings: -h myremotecomp -p 22
             else
-                argString = terms != null
-                    ? string.Format(c.ArgumentsFormat, terms.ToArray<object?>())
-                    : c.ArgumentsFormat;
+            {
+                if (terms != null)
+                {
+                    var termsList = terms.ToList();
+                    // Determine the highest placeholder index (e.g. {2} → 2) so that missing
+                    // arguments are silently replaced with an empty string instead of throwing
+                    // a FormatException when the user provides fewer terms than placeholders.
+                    var maxIndex = Regex.Matches(c.ArgumentsFormat, @"\{(\d+)(?::[^}]*)?\}")
+                        .Cast<Match>()
+                        .Select(m => int.Parse(m.Groups[1].Value))
+                        .DefaultIfEmpty(-1)
+                        .Max();
+
+                    for (var i = termsList.Count; i <= maxIndex; i++)
+                        termsList.Add(string.Empty);
+
+                    argString = string.Format(c.ArgumentsFormat, termsList.ToArray<object?>());
+                }
+                else
+                    argString = c.ArgumentsFormat;
+            }
         }
 
         var workingDir = c.WorkingDirectory;
