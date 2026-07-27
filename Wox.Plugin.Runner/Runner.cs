@@ -63,7 +63,7 @@ public class Runner : IPlugin, ISettingProvider
             //
             // for example if the user types `pt hello there`, then a {0} and {1} version will have the lowest ranking
             // while the version with {2} will have the highest, followed by {3}, {4}...{*}.
-            results = Settings.Commands.Where(c => c.Shortcut == shortcut)
+            results = Settings.Commands.Where(c => string.Equals(c.Shortcut, shortcut, StringComparison.OrdinalIgnoreCase))
                 .Select(c => new Result
                 {
                     Score = 50 + (terms.Length <= c.TermsCount ? terms.Length - c.TermsCount : -50),
