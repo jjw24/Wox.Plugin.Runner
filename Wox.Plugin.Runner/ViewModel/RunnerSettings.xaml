@@ -362,6 +362,16 @@
                             IsChecked="{Binding SelectedCommand.RunAsAdministrator, UpdateSourceTrigger=PropertyChanged}"
                             Style="{StaticResource FluentCheckBox}"
                             ToolTip="Requires User Account Control (UAC) elevation" />
+
+                        <!-- Hide Console Window -->
+                        <CheckBox
+                            Grid.Row="5"
+                            Grid.Column="1"
+                            Margin="0,8,0,0"
+                            Content="Hide console window"
+                            IsChecked="{Binding SelectedCommand.HideConsoleWindow, UpdateSourceTrigger=PropertyChanged}"
+                            Style="{StaticResource FluentCheckBox}"
+                            ToolTip="Suppress the cmd.exe window that appears when launching .cmd or .bat files (e.g. VS Code's 'code' command)" />
                     </Grid>
                 </GroupBox>
 

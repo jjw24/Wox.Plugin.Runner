@@ -157,6 +157,9 @@ public class Runner : IPlugin, ISettingProvider
             if (command.RunAsAdministrator)
                 startInfo.Verb = "runas";
 
+            if (command.HideConsoleWindow)
+                startInfo.WindowStyle = ProcessWindowStyle.Hidden;
+
             // Working directory if set via settings will be args.WorkingDirectory.
             // If not set (e.g. when the command path is a URL), args.WorkingDirectory will be
             // empty and the process simply runs from the application's directory.
