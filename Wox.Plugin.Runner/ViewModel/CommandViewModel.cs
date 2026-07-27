@@ -16,6 +16,8 @@ public sealed class CommandViewModel : INotifyPropertyChanged
 
     private bool _runAsAdministrator;
 
+    private bool _hideConsoleWindow;
+
     private string _shortcut;
 
     private string _workingDirectory;
@@ -29,6 +31,7 @@ public sealed class CommandViewModel : INotifyPropertyChanged
         _workingDirectory = command.WorkingDirectory;
         _argumentsFormat = command.ArgumentsFormat;
         _runAsAdministrator = command.RunAsAdministrator;
+        _hideConsoleWindow = command.HideConsoleWindow;
     }
 
     private Command Command { get; }
@@ -67,6 +70,12 @@ public sealed class CommandViewModel : INotifyPropertyChanged
     {
         get => _runAsAdministrator;
         set => SetField(ref _runAsAdministrator, value);
+    }
+
+    public bool HideConsoleWindow
+    {
+        get => _hideConsoleWindow;
+        set => SetField(ref _hideConsoleWindow, value);
     }
 
     public bool IsDirty
@@ -109,7 +118,8 @@ public sealed class CommandViewModel : INotifyPropertyChanged
             Path = Path,
             WorkingDirectory = WorkingDirectory,
             ArgumentsFormat = ArgumentsFormat,
-            RunAsAdministrator = RunAsAdministrator
+            RunAsAdministrator = RunAsAdministrator,
+            HideConsoleWindow = HideConsoleWindow
         };
     }
 
@@ -121,6 +131,7 @@ public sealed class CommandViewModel : INotifyPropertyChanged
             Path != Command.Path ||
             WorkingDirectory != Command.WorkingDirectory ||
             ArgumentsFormat != Command.ArgumentsFormat ||
-            RunAsAdministrator != Command.RunAsAdministrator;
+            RunAsAdministrator != Command.RunAsAdministrator ||
+            HideConsoleWindow != Command.HideConsoleWindow;
     }
 }

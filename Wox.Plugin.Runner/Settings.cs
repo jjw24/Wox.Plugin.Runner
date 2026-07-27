@@ -11,6 +11,7 @@ namespace Wox.Plugin.Runner
         public string WorkingDirectory { get; set; } = "";
         public string ArgumentsFormat { get; set; } = "";
         public bool RunAsAdministrator { get; set; } = false;
+        public bool HideConsoleWindow { get; set; } = false;
 
         public bool UnlimitedTerms
         {
