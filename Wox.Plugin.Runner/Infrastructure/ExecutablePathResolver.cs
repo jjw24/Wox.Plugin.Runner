@@ -27,10 +27,14 @@ internal static class ExecutablePathResolver
         if (Path.IsPathRooted(candidate))
             return false;
 
+        // If a relative path contains directory segments, Windows won't search PATH for it.
+        // Avoid treating it as a bare executable name (which can cause false positives).
+        if (!string.IsNullOrEmpty(Path.GetDirectoryName(candidate)))
+            return false;
+
         var fileName = Path.GetFileName(candidate);
         if (string.IsNullOrWhiteSpace(fileName))
             return false;
-
         var extensions = GetExtensions(fileName);
         foreach (var directory in GetSearchDirectories())
         {
