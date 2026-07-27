@@ -51,10 +51,11 @@ internal static class ExecutablePathResolver
         return false;
     }
 
-    private static IEnumerable<string> GetSearchDirectories()
-        => (Environment.GetEnvironmentVariable("PATH") ?? string.Empty)
-            .Split(Path.PathSeparator, StringSplitOptions.RemoveEmptyEntries)
-            .Select(Normalize);
+private static IEnumerable<string> GetSearchDirectories()
+    => (Environment.GetEnvironmentVariable("PATH") ?? string.Empty)
+        .Split(Path.PathSeparator, StringSplitOptions.RemoveEmptyEntries)
+        .Select(dir => Environment.ExpandEnvironmentVariables(Normalize(dir)))
+        .Where(dir => !string.IsNullOrWhiteSpace(dir));
 
     private static IEnumerable<string> GetExtensions(string fileName)
     {
