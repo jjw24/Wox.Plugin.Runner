@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Text.RegularExpressions;
 using System.Windows.Controls;
 using Flow.Launcher.Plugin;
 using Wox.Plugin.Runner.Infrastructure;
@@ -13,6 +14,7 @@ namespace Wox.Plugin.Runner;
 
 public class Runner : IPlugin, ISettingProvider
 {
+    private static readonly Regex PositionalArgumentRegex = new(@"(?<!\{)\{(\d+)(?:[^{}]*)\}(?!\})", RegexOptions.Compiled);
     internal static PluginInitContext Context = null!;
     internal static Settings Settings = null!;
     private RunnerSettingsViewModel? _viewModel;
@@ -208,7 +210,7 @@ public class Runner : IPlugin, ISettingProvider
             Context.API.ShowMsg("Error: Invalid Arguments Format",
                 $"The arguments format for command '{command.Description}' is invalid.\n\n" +
                 "Please check the Arguments field in the plugin settings.\n\n" +
-                "Use {0}, {1}, {2}... for positional arguments or {*} for all arguments.");
+                "Use {0}, {1}, {2}... for positional arguments ({0} is the first argument) or {*} for all arguments.");
             Context.API.LogException(nameof(Runner), "Argument format was invalid", ex);
             return false;
         }
@@ -239,7 +241,7 @@ public class Runner : IPlugin, ISettingProvider
             // or command's arguments HAS set normal text arguments e.g. settings: -h myremotecomp -p 22
             else
                 argString = terms != null
-                    ? string.Format(c.ArgumentsFormat, terms.ToArray<object?>())
+                    ? FormatArguments(c.ArgumentsFormat, terms)
                     : c.ArgumentsFormat;
         }
 
@@ -266,6 +268,41 @@ public class Runner : IPlugin, ISettingProvider
 
     private static bool IsUrl(string path)
         => Uri.TryCreate(path, UriKind.Absolute, out var uri) && !uri.IsFile;
+
+    private static string FormatArguments(string format, IEnumerable<string> terms)
+    {
+        var values = terms.Cast<object?>().ToArray();
+
+        try
+        {
+            return string.Format(format, values);
+        }
+        catch (FormatException) when (LooksLikeOneBasedFormat(format))
+        {
+            var oneBasedValues = new object?[values.Length + 1];
+            Array.Copy(values, 0, oneBasedValues, 1, values.Length);
+            return string.Format(format, oneBasedValues);
+        }
+    }
+
+    private static bool LooksLikeOneBasedFormat(string format)
+    {
+        var hasZero = false;
+        var hasOneOrGreater = false;
+
+        foreach (Match match in PositionalArgumentRegex.Matches(format))
+        {
+            if (!int.TryParse(match.Groups[1].Value, out var position))
+                continue;
+
+            if (position == 0)
+                hasZero = true;
+            else
+                hasOneOrGreater = true;
+        }
+
+        return hasOneOrGreater && !hasZero;
+    }
 
     private sealed class ProcessArguments
     {

@@ -402,7 +402,7 @@
                                         Margin="0,4,0,0"
                                         FontSize="12"
                                         Foreground="{DynamicResource Color04B}"
-                                        Text="• Use {0}, {1}, {2}... for positional arguments"
+                                        Text="• Use {0}, {1}, {2}... for positional arguments ({0} is the first argument)"
                                         TextWrapping="Wrap" />
                                     <Border
                                         Margin="0,8,0,0"
