@@ -81,7 +81,7 @@ public partial class RunnerSettings
                 !ExecutablePathResolver.CanResolve(c.Path)))
         {
             MessageBox.Show(
-                "One or more commands is missing a Shortcut or valid executable Path.\n\n" +
+                "One or more commands are missing a Shortcut or valid executable Path.\n\n" +
                 "You can enter a full path or an executable name that is available on PATH.", "",
                 MessageBoxButtons.OK, MessageBoxIcon.Warning);
             return;
